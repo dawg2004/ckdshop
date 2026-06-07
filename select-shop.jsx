@@ -1255,7 +1255,8 @@ function AdminPage({ categories, setCategories, products, setProducts, settings,
       <aside className="adm-side">
         <div className="adm-logo">{settings.shopName}</div>
         {navItems.map(item => (
-          <div key={item.key} className={`adm-ni ${adminPage===item.key?"on":""}`}
+          <div key={item.key}
+            className={`adm-ni ${(adminPage===item.key||(item.key==="products"&&adminPage==="products-new"))?"on":""}`}
             onClick={() => {setAdminPage(item.key);setEditProd(null);setEditCat(null);}}>
             <span>{item.icon}</span>{item.label}
           </div>
@@ -1265,25 +1266,34 @@ function AdminPage({ categories, setCategories, products, setProducts, settings,
         </div>
       </aside>
       <main className="adm-main">
-        {adminPage==="dashboard"  && <AdminDash products={products} />}
-        {adminPage==="products"   && <AdminProds products={products} setProducts={setProducts} categories={categories} editProd={editProd} setEditProd={setEditProd} />}
-        {adminPage==="categories" && <AdminCats  categories={categories} setCategories={setCategories} editCat={editCat} setEditCat={setEditCat} />}
-        {adminPage==="orders"     && <AdminOrders />}
-        {adminPage==="settings"   && <AdminSettings settings={settings} setSettings={setSettings} />}
+        {adminPage==="dashboard"    && <AdminDash products={products} setAdminPage={setAdminPage} />}
+        {(adminPage==="products" || adminPage==="products-new") && (
+          <AdminProds
+            products={products} setProducts={setProducts}
+            categories={categories}
+            editProd={editProd} setEditProd={setEditProd}
+            openNew={adminPage==="products-new"}
+          />
+        )}
+        {adminPage==="categories"   && <AdminCats  categories={categories} setCategories={setCategories} editCat={editCat} setEditCat={setEditCat} />}
+        {adminPage==="orders"       && <AdminOrders />}
+        {adminPage==="settings"     && <AdminSettings settings={settings} setSettings={setSettings} />}
       </main>
     </div>
   );
 }
 
-function AdminDash({ products }) {
+function AdminDash({ products, setAdminPage }) {
   const pub = products.filter(p=>p.is_published).length;
   const oos = products.filter(p=>p.stock_quantity===0).length;
+  const newC = products.filter(p=>p.is_new).length;
+  const total = products.reduce((s,p)=>s+p.price,0);
   return (
     <div>
       <div className="adm-title">Dashboard</div>
       <div className="adm-sub">ショップの概要</div>
       <div className="stat-grid">
-        {[["本日の注文数","—","件"],["今月の売上","—","円"],["在庫切れ商品",oos,"件"],["公開中の商品",pub,"件"]].map(([l,v,u]) => (
+        {[["公開中の商品",pub,"件"],["在庫切れ",oos,"件"],["NEW商品",newC,"件"],["登録商品数",products.length,"件"]].map(([l,v,u]) => (
           <div className="stat" key={l}>
             <div className="stat-l">{l}</div>
             <div className="stat-v">{v} <span className="stat-u">{u}</span></div>
@@ -1293,118 +1303,349 @@ function AdminDash({ products }) {
       <div className="panel">
         <div className="panel-t">Quick Links</div>
         <div style={{display:"flex",gap:".75rem",flexWrap:"wrap"}}>
-          <button className="btn btn-o btn-sm">商品を追加する</button>
-          <button className="btn btn-o btn-sm">カテゴリを編集する</button>
-          <button className="btn btn-o btn-sm">サイト設定を変更する</button>
+          <button className="btn btn-p btn-sm" onClick={() => setAdminPage("products-new")}>+ 商品を追加する</button>
+          <button className="btn btn-o btn-sm" onClick={() => setAdminPage("categories")}>カテゴリを編集する</button>
+          <button className="btn btn-o btn-sm" onClick={() => setAdminPage("settings")}>サイト設定を変更する</button>
         </div>
       </div>
     </div>
   );
 }
 
-function AdminProds({ products, setProducts, categories, editProd, setEditProd }) {
+const COLOR_SWATCHES = [
+  { hex: "#2a1f1a", label: "ブラック" },
+  { hex: "#1a1f2a", label: "ネイビー" },
+  { hex: "#2a1a1f", label: "バーガンディ" },
+  { hex: "#3a2a1a", label: "モカ" },
+  { hex: "#1f1a26", label: "プラム" },
+  { hex: "#261a26", label: "モーヴ" },
+  { hex: "#1a2222", label: "フォレスト" },
+  { hex: "#2e2520", label: "チャコール" },
+  { hex: "#3a2e28", label: "トープ" },
+  { hex: "#1e1e1e", label: "ジェット" },
+];
+const MATERIAL_OPTIONS = ["シルク100%","レース","コットン","サテン","ベルベット","メッシュ","チュール","ナイロン","ポリエステル","リネン"];
+const SIZE_OPTIONS     = ["XS/S","S/M","M/L","L/XL","フリーサイズ","XS","S","M","L","XL"];
+const COLOR_OPTIONS    = ["ブラック","ネイビー","バーガンディ","アイボリー","モカ","ホワイト","グレー","ピンク","ベージュ","グリーン"];
+
+function makeBlank() {
+  return {
+    id: `prod-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+    name: "", slug: "", price: 0, sale_price: null,
+    description: "", short_description: "",
+    category_ids: [], tags: [],
+    stock_quantity: 10,
+    is_published: true, is_new: false, is_best_seller: false, is_featured: false,
+    budget_range: "〜5,000円",
+    material: "", size: "", color_name: "", color: "#2a1f1a",
+  };
+}
+
+function toSlug(name) {
+  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "").replace(/-+/g, "-");
+}
+
+function AdminProds({ products, setProducts, categories, editProd, setEditProd, openNew: openNewProp }) {
   const [search, setSearch] = useState("");
   const [form, setForm] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [tagInput, setTagInput] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
-  const blank = {
-    id:`prod-${Date.now()}`,name:"",slug:"",price:0,sale_price:null,
-    description:"",category_ids:[],stock_quantity:10,
-    is_published:true,is_new:false,is_best_seller:false,is_featured:false,
-    budget_range:"〜5,000円",material:"",size:"",color_name:"",color:"#2a1f1a",tags:[],
+  const openEdit = p => { setEditProd(p); setForm({...p}); setErrors({}); setTagInput(""); };
+  const openNew  = () => {
+    const b = makeBlank();
+    setEditProd(b); setForm(b); setErrors({}); setTagInput("");
   };
 
-  const openEdit = p => { setEditProd(p); setForm({...p}); };
-  const openNew  = () => { setEditProd(blank); setForm({...blank}); };
+  useEffect(() => {
+    if (openNewProp) openNew();
+  }, [openNewProp]);
+
+  const setField = (k, v) => setForm(f => {
+    const next = {...f, [k]: v};
+    if (k === "name" && !products.find(p => p.id === f.id)?.slug) {
+      next.slug = toSlug(v);
+    }
+    if (k === "price" || k === "sale_price") {
+      next.budget_range = getBudgetRange(Number(next.price) || 0);
+    }
+    return next;
+  });
+
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = "商品名は必須です";
+    if (!form.price || form.price <= 0) e.price = "正しい価格を入力してください";
+    if (form.category_ids.length === 0) e.category_ids = "カテゴリを1つ以上選択してください";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
   const save = () => {
-    if (!form.name) return;
+    if (!validate()) return;
+    const final = {
+      ...form,
+      price: Number(form.price),
+      sale_price: form.sale_price ? Number(form.sale_price) : null,
+      stock_quantity: Number(form.stock_quantity),
+      budget_range: getBudgetRange(Number(form.price)),
+    };
     setProducts(prev => {
-      const ex = prev.find(p=>p.id===form.id);
-      return ex ? prev.map(p=>p.id===form.id?{...form}:p) : [...prev,form];
+      const ex = prev.find(p => p.id === final.id);
+      return ex ? prev.map(p => p.id === final.id ? final : p) : [final, ...prev];
     });
     setEditProd(null); setForm(null);
   };
-  const togglePub = id => setProducts(prev => prev.map(p=>p.id===id?{...p,is_published:!p.is_published}:p));
-  const filtered = products.filter(p=>p.name.toLowerCase().includes(search.toLowerCase()));
+
+  const deleteProd = id => {
+    setProducts(prev => prev.filter(p => p.id !== id));
+    setDeleteConfirm(null);
+    if (editProd?.id === id) { setEditProd(null); setForm(null); }
+  };
+
+  const togglePub = id => setProducts(prev => prev.map(p => p.id===id ? {...p,is_published:!p.is_published} : p));
+
+  const addTag = () => {
+    const t = tagInput.trim();
+    if (t && !form.tags.includes(t)) setForm(f => ({...f, tags: [...f.tags, t]}));
+    setTagInput("");
+  };
+  const removeTag = t => setForm(f => ({...f, tags: f.tags.filter(x => x !== t)}));
+
+  const filtered = products.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
+  const isNew = form && !products.find(p => p.id === form.id);
 
   if (editProd && form) return (
-    <div>
-      <div style={{display:"flex",alignItems:"center",gap:"1rem",marginBottom:"2rem"}}>
+    <div style={{paddingBottom:"3rem"}}>
+      {/* Header */}
+      <div style={{display:"flex",alignItems:"center",gap:"1rem",marginBottom:"2rem",flexWrap:"wrap"}}>
         <button className="btn btn-o btn-sm" onClick={() => {setEditProd(null);setForm(null);}}>← 戻る</button>
-        <div className="adm-title" style={{margin:0}}>{products.find(p=>p.id===form.id)?"商品を編集":"商品を追加"}</div>
+        <div className="adm-title" style={{margin:0,flex:1}}>{isNew ? "新規商品登録" : "商品を編集"}</div>
+        {!isNew && (
+          <button className="btn btn-sm" style={{background:"rgba(160,80,80,0.15)",color:"#c07a7a",border:"1px solid rgba(160,80,80,0.3)"}}
+            onClick={() => setDeleteConfirm(form.id)}>削除</button>
+        )}
       </div>
-      <div className="panel">
-        <div className="panel-t">基本情報</div>
-        <div className="fg2">
-          {[["商品名 *","name","text"],["スラッグ","slug","text"],["価格（税込）","price","number"],["セール価格","sale_price","number"]].map(([l,k,t]) => (
-            <div className="fg3" key={k}>
-              <label className="fl">{l}</label>
-              <input type={t} className="inp" value={form[k]||""} onChange={e=>setForm(f=>({...f,[k]:t==="number"?Number(e.target.value)||null:e.target.value}))} />
-            </div>
-          ))}
+
+      {deleteConfirm && (
+        <div style={{background:"rgba(160,80,80,0.1)",border:"1px solid rgba(160,80,80,0.3)",padding:"1rem 1.5rem",marginBottom:"1.5rem",display:"flex",alignItems:"center",gap:"1rem",flexWrap:"wrap"}}>
+          <span style={{fontSize:".82rem",color:"#c07a7a",flex:1}}>この商品を削除しますか？この操作は元に戻せません。</span>
+          <button className="btn btn-sm" style={{background:"#8B3A3A",color:"#f0ece5",border:"none"}} onClick={() => deleteProd(deleteConfirm)}>削除する</button>
+          <button className="btn btn-o btn-sm" onClick={() => setDeleteConfirm(null)}>キャンセル</button>
         </div>
-        <div className="fg3">
-          <label className="fl">商品説明</label>
-          <textarea className="txta" value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))} />
-        </div>
-        <div className="fg2">
-          {[["素材","material"],["サイズ","size"],["カラー","color_name"]].map(([l,k]) => (
-            <div className="fg3" key={k}>
-              <label className="fl">{l}</label>
-              <input type="text" className="inp" value={form[k]||""} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))} />
+      )}
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 260px",gap:"1.5rem",alignItems:"start"}}>
+        {/* Left column */}
+        <div>
+          {/* 基本情報 */}
+          <div className="panel">
+            <div className="panel-t">基本情報</div>
+            <div className="fg3">
+              <label className="fl">商品名 <span style={{color:"var(--accent)"}}>*</span></label>
+              <input className="inp" value={form.name} onChange={e=>setField("name",e.target.value)} placeholder="例: Silk Soft Bra" />
+              {errors.name && <div style={{color:"#c07a7a",fontSize:".7rem",marginTop:".3rem"}}>{errors.name}</div>}
             </div>
-          ))}
-          <div className="fg3">
-            <label className="fl">在庫数</label>
-            <input type="number" className="inp" value={form.stock_quantity||0} onChange={e=>setForm(f=>({...f,stock_quantity:Number(e.target.value)}))} />
+            <div className="fg3">
+              <label className="fl">スラッグ</label>
+              <input className="inp" value={form.slug} onChange={e=>setField("slug",e.target.value)} placeholder="自動生成されます" />
+            </div>
+            <div className="fg3">
+              <label className="fl">商品説明</label>
+              <textarea className="txta" rows={4} value={form.description} onChange={e=>setField("description",e.target.value)} placeholder="商品の詳細な説明を入力してください" />
+            </div>
+            <div className="fg3">
+              <label className="fl">短い説明文（一覧表示用）</label>
+              <input className="inp" value={form.short_description||""} onChange={e=>setField("short_description",e.target.value)} placeholder="例: 上質素材と繊細なデザイン" />
+            </div>
+          </div>
+
+          {/* 価格・在庫 */}
+          <div className="panel">
+            <div className="panel-t">価格・在庫</div>
+            <div className="fg2">
+              <div className="fg3">
+                <label className="fl">販売価格（税込）<span style={{color:"var(--accent)"}}>*</span></label>
+                <div style={{position:"relative"}}>
+                  <span style={{position:"absolute",left:".9rem",top:"50%",transform:"translateY(-50%)",color:"var(--text3)",fontSize:".82rem"}}>¥</span>
+                  <input className="inp" type="number" min="0" value={form.price||""} onChange={e=>setField("price",e.target.value)} style={{paddingLeft:"1.8rem"}} />
+                </div>
+                {errors.price && <div style={{color:"#c07a7a",fontSize:".7rem",marginTop:".3rem"}}>{errors.price}</div>}
+              </div>
+              <div className="fg3">
+                <label className="fl">セール価格（空白でセールなし）</label>
+                <div style={{position:"relative"}}>
+                  <span style={{position:"absolute",left:".9rem",top:"50%",transform:"translateY(-50%)",color:"var(--text3)",fontSize:".82rem"}}>¥</span>
+                  <input className="inp" type="number" min="0" value={form.sale_price||""} onChange={e=>setField("sale_price",e.target.value||null)} style={{paddingLeft:"1.8rem"}} />
+                </div>
+              </div>
+              <div className="fg3">
+                <label className="fl">在庫数</label>
+                <input className="inp" type="number" min="0" value={form.stock_quantity} onChange={e=>setField("stock_quantity",e.target.value)} />
+              </div>
+              <div className="fg3">
+                <label className="fl">価格帯（自動）</label>
+                <input className="inp" value={form.budget_range} readOnly style={{opacity:.5,cursor:"not-allowed"}} />
+              </div>
+            </div>
+          </div>
+
+          {/* 商品仕様 */}
+          <div className="panel">
+            <div className="panel-t">商品仕様</div>
+            <div className="fg2">
+              <div className="fg3">
+                <label className="fl">素材</label>
+                <select className="sel" value={form.material} onChange={e=>setField("material",e.target.value)}>
+                  <option value="">選択してください</option>
+                  {MATERIAL_OPTIONS.map(m=><option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+              <div className="fg3">
+                <label className="fl">サイズ</label>
+                <select className="sel" value={form.size} onChange={e=>setField("size",e.target.value)}>
+                  <option value="">選択してください</option>
+                  {SIZE_OPTIONS.map(s=><option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div className="fg3">
+                <label className="fl">カラー名</label>
+                <select className="sel" value={form.color_name} onChange={e=>setField("color_name",e.target.value)}>
+                  <option value="">選択してください</option>
+                  {COLOR_OPTIONS.map(c=><option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="fg3">
+              <label className="fl">プレビューカラー（画像プレースホルダー）</label>
+              <div style={{display:"flex",flexWrap:"wrap",gap:".5rem",marginTop:".3rem"}}>
+                {COLOR_SWATCHES.map(sw => (
+                  <div key={sw.hex}
+                    onClick={() => setField("color", sw.hex)}
+                    title={sw.label}
+                    style={{
+                      width:32,height:32,background:sw.hex,cursor:"pointer",
+                      border: form.color===sw.hex ? "2px solid var(--accent)" : "2px solid transparent",
+                      outline: form.color===sw.hex ? "1px solid var(--accent)" : "none",
+                      transition:"border .15s",
+                    }}
+                  />
+                ))}
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:".8rem",marginTop:".6rem"}}>
+                <div style={{width:40,height:40,background:form.color,border:"1px solid var(--border)"}} />
+                <input type="color" value={form.color} onChange={e=>setField("color",e.target.value)}
+                  style={{width:40,height:40,cursor:"pointer",border:"none",background:"none",padding:0}} />
+                <span style={{fontSize:".68rem",color:"var(--text3)"}}>カスタムカラーを選択</span>
+              </div>
+            </div>
+          </div>
+
+          {/* タグ */}
+          <div className="panel">
+            <div className="panel-t">タグ</div>
+            <div style={{display:"flex",gap:".5rem",flexWrap:"wrap",marginBottom:".8rem"}}>
+              {(form.tags||[]).map(t => (
+                <span key={t} style={{display:"inline-flex",alignItems:"center",gap:".4rem",padding:".2rem .7rem",border:"1px solid var(--border)",fontSize:".72rem",color:"var(--text2)"}}>
+                  {t}
+                  <span onClick={()=>removeTag(t)} style={{cursor:"pointer",color:"var(--text3)",fontSize:"1rem",lineHeight:1}}>×</span>
+                </span>
+              ))}
+            </div>
+            <div style={{display:"flex",gap:".5rem"}}>
+              <input className="inp" value={tagInput} onChange={e=>setTagInput(e.target.value)}
+                onKeyDown={e=>{if(e.key==="Enter"){e.preventDefault();addTag();}}}
+                placeholder="タグを入力してEnter" style={{flex:1}} />
+              <button className="btn btn-o btn-sm" onClick={addTag}>追加</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div>
+          {/* カテゴリ */}
+          <div className="panel">
+            <div className="panel-t">カテゴリ <span style={{color:"var(--accent)"}}>*</span></div>
+            <div style={{display:"flex",flexDirection:"column",gap:".4rem"}}>
+              {categories.map(cat => {
+                const on = form.category_ids.includes(cat.id);
+                return (
+                  <div key={cat.id}
+                    onClick={() => setField("category_ids", on ? form.category_ids.filter(id=>id!==cat.id) : [...form.category_ids,cat.id])}
+                    style={{padding:".55rem .9rem",border:`1px solid ${on?"var(--accent)":"var(--border)"}`,background:on?"rgba(200,168,130,0.12)":"transparent",color:on?"var(--accent)":"var(--text2)",cursor:"pointer",fontSize:".78rem",transition:"all .15s",display:"flex",alignItems:"center",gap:".5rem"}}>
+                    <span style={{width:12,height:12,border:`1px solid ${on?"var(--accent)":"var(--text3)"}`,background:on?"var(--accent)":"transparent",flexShrink:0,display:"inline-block"}} />
+                    {cat.name}
+                  </div>
+                );
+              })}
+            </div>
+            {errors.category_ids && <div style={{color:"#c07a7a",fontSize:".7rem",marginTop:".5rem"}}>{errors.category_ids}</div>}
+          </div>
+
+          {/* 表示設定 */}
+          <div className="panel">
+            <div className="panel-t">表示設定</div>
+            {[["is_published","公開する","非公開にする"],["is_new","NEW バッジ",""],["is_best_seller","BEST バッジ",""],["is_featured","トップ特集",""]].map(([k,l,sub]) => (
+              <div className="opt-row" key={k} style={{paddingBottom:".8rem",borderBottom:"1px solid var(--border)",marginBottom:".8rem"}}>
+                <div>
+                  <div style={{fontSize:".8rem",color:"var(--text)"}}>{l}</div>
+                  {sub && <div style={{fontSize:".65rem",color:"var(--text3)"}}>{!form[k]?sub:""}</div>}
+                </div>
+                <label className="tgl">
+                  <input type="checkbox" checked={!!form[k]} onChange={e=>setField(k,e.target.checked)} />
+                  <span className="tgl-sl" />
+                </label>
+              </div>
+            ))}
+          </div>
+
+          {/* プレビュー */}
+          <div className="panel">
+            <div className="panel-t">プレビュー</div>
+            <div style={{aspectRatio:"3/4",background:form.color,marginBottom:".8rem",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(200,168,130,0.3)" strokeWidth="1">
+                <rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/>
+              </svg>
+            </div>
+            <div style={{fontSize:".78rem",color:"var(--text2)",marginBottom:".2rem"}}>{form.name||"商品名"}</div>
+            <div style={{fontSize:".75rem",color:"var(--text3)"}}>
+              {form.sale_price
+                ? <><span style={{textDecoration:"line-through",marginRight:".4rem"}}>¥{Number(form.price||0).toLocaleString()}</span><span style={{color:"var(--accent)"}}>¥{Number(form.sale_price).toLocaleString()}</span></>
+                : `¥${Number(form.price||0).toLocaleString()}`}
+            </div>
           </div>
         </div>
       </div>
-      <div className="panel">
-        <div className="panel-t">カテゴリ</div>
-        <div style={{display:"flex",flexWrap:"wrap",gap:".5rem"}}>
-          {categories.map(cat => {
-            const on = form.category_ids.includes(cat.id);
-            return (
-              <div key={cat.id}
-                onClick={() => setForm(f=>({...f,category_ids:on?f.category_ids.filter(id=>id!==cat.id):[...f.category_ids,cat.id]}))}
-                style={{padding:".4rem .9rem",border:`1px solid ${on?"var(--accent)":"var(--border)"}`,background:on?"rgba(200,168,130,0.15)":"transparent",color:on?"var(--accent)":"var(--text2)",cursor:"pointer",fontSize:".74rem",transition:"all .15s"}}>
-                {cat.name}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="panel">
-        <div className="panel-t">表示設定</div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:"1rem"}}>
-          {[["is_published","公開"],["is_new","New表示"],["is_best_seller","Best Seller"],["is_featured","Featured"]].map(([k,l]) => (
-            <div className="opt-row" key={k} style={{margin:0}}>
-              <span style={{fontSize:".8rem",color:"var(--text2)"}}>{l}</span>
-              <label className="tgl"><input type="checkbox" checked={!!form[k]} onChange={e=>setForm(f=>({...f,[k]:e.target.checked}))} /><span className="tgl-sl" /></label>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{display:"flex",gap:"1rem",marginTop:".5rem"}}>
-        <button className="btn btn-p" onClick={save}>保存する</button>
-        <button className="btn btn-o" onClick={() => {setEditProd(null);setForm(null);}}>キャンセル</button>
+
+      {/* Save bar */}
+      <div style={{display:"flex",gap:"1rem",alignItems:"center",marginTop:"1.5rem",padding:"1.2rem 1.5rem",background:"var(--bg2)",border:"1px solid var(--border)",position:"sticky",bottom:0}}>
+        <button className="btn btn-p" onClick={save}>{isNew?"登録する":"変更を保存する"}</button>
+        <button className="btn btn-o" onClick={()=>{setEditProd(null);setForm(null);}}>キャンセル</button>
+        {Object.keys(errors).length > 0 && (
+          <span style={{fontSize:".75rem",color:"#c07a7a"}}>入力内容をご確認ください</span>
+        )}
       </div>
     </div>
   );
 
   return (
     <div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:"1.5rem"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:"1.5rem",flexWrap:"wrap",gap:"1rem"}}>
         <div><div className="adm-title">商品管理</div><div className="adm-sub">{products.length}件の商品</div></div>
-        <button className="btn btn-p btn-sm" onClick={openNew}>+ 商品を追加</button>
+        <button className="btn btn-p btn-sm" onClick={openNew}>+ 新規商品登録</button>
       </div>
       <div style={{marginBottom:"1rem"}}>
-        <input type="text" className="inp" placeholder="商品名で検索..." value={search} onChange={e=>setSearch(e.target.value)} style={{maxWidth:"300px"}} />
+        <input type="text" className="inp" placeholder="商品名で検索..." value={search} onChange={e=>setSearch(e.target.value)} style={{maxWidth:"320px"}} />
       </div>
       <div style={{overflowX:"auto"}}>
         <table className="tbl">
           <thead><tr><th>商品名</th><th>価格</th><th>カテゴリ</th><th>在庫</th><th>状態</th><th>操作</th></tr></thead>
           <tbody>
+            {filtered.length === 0 && (
+              <tr><td colSpan={6} style={{textAlign:"center",padding:"2rem",color:"var(--text3)"}}>該当する商品がありません</td></tr>
+            )}
             {filtered.map(p => {
               const cat = categories.find(c=>p.category_ids.includes(c.id));
               return (
@@ -1417,11 +1658,15 @@ function AdminProds({ products, setProducts, categories, editProd, setEditProd }
                         <div style={{display:"flex",gap:".25rem",marginTop:".2rem"}}>
                           {p.is_new && <span className="sb sb-new">NEW</span>}
                           {p.is_best_seller && <span className="sb sb-on">BEST</span>}
+                          {p.is_featured && <span className="sb sb-new">FEATURED</span>}
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td>¥{p.price.toLocaleString()}{p.sale_price&&<span style={{color:"var(--accent)",marginLeft:".4rem",fontSize:".72rem"}}>→¥{p.sale_price.toLocaleString()}</span>}</td>
+                  <td>
+                    ¥{p.price.toLocaleString()}
+                    {p.sale_price && <span style={{color:"var(--accent)",marginLeft:".4rem",fontSize:".72rem"}}>→¥{p.sale_price.toLocaleString()}</span>}
+                  </td>
                   <td style={{fontSize:".76rem"}}>{cat?.name||"—"}</td>
                   <td style={{color:p.stock_quantity===0?"#c07a7a":"inherit"}}>{p.stock_quantity===0?"SOLD OUT":`${p.stock_quantity}点`}</td>
                   <td>
@@ -1431,7 +1676,9 @@ function AdminProds({ products, setProducts, categories, editProd, setEditProd }
                       {p.is_published?"公開中":"非公開"}
                     </button>
                   </td>
-                  <td><button className="btn btn-o btn-sm" onClick={() => openEdit(p)}>編集</button></td>
+                  <td style={{display:"flex",gap:".4rem"}}>
+                    <button className="btn btn-o btn-sm" onClick={() => openEdit(p)}>編集</button>
+                  </td>
                 </tr>
               );
             })}
