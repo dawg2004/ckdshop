@@ -120,6 +120,115 @@ const JOURNAL_POSTS = [
   { id: 3, category: "STYLE GUIDE", title: "長く使えるものを選ぶ基準",   date: "2025.04.28", color: "#261a1f", image: JOURNAL_IMAGES[2] },
 ];
 
+// ── STAFF & REVIEWS DATA ──
+const STAFF_MEMBERS = [
+  { id: "s1", name: "Yuki Tanaka", name_jp: "田中 由紀", role: "バイヤー",       color: "#2a1f1a", image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&h=200&fit=crop&q=80" },
+  { id: "s2", name: "Haruki Sato", name_jp: "佐藤 陽樹", role: "スタイリスト",   color: "#1a1f2a", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&q=80" },
+  { id: "s3", name: "Mio Kimura",  name_jp: "木村 澪",   role: "クリエイティブ", color: "#261a1f", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&q=80" },
+];
+
+const STAFF_ARTICLES = [
+  {
+    id: "ar1", staff_id: "s1", product_id: "prod-1",
+    title: "毎朝のコーヒーを、もっと豊かに",
+    lead: "このマグを手にした瞬間、その重さと温度に驚きました。陶土の質感が、ただの朝を特別な時間に変えてくれます。",
+    body: `バイヤーとして国内外の窯元を巡る中で、このCeramic Mugに出会いました。\n\n作り手の山田さんは、福岡の小さな工房で一点一点ろくろを引いています。「毎日使うものだからこそ、手に持ったときの感触を大切にしている」という言葉が印象的でした。\n\n実際に使い始めて2ヶ月。コーヒーの温度が冷めにくく、口当たりが柔らかい。何より、使うたびに表情が変わる釉薬の美しさに毎朝見惚れています。\n\n朝の時間が少し豊かになった気がします。ぜひ、あなたの日常にも取り入れてみてください。`,
+    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=1200&h=700&fit=crop&q=85",
+    date: "2025.05.25", read_time: 3, tags: ["器", "コーヒー", "陶器", "朝の時間"],
+  },
+  {
+    id: "ar2", staff_id: "s2", product_id: "prod-2",
+    title: "テーブルが変わると、食卓が変わる",
+    lead: "Wooden Trayをひとつ置くだけで、食卓の空気がぐっと引き締まります。木の温もりと、その静けさについて。",
+    body: `スタイリングの仕事をしていると、「余白」の大切さを痛感します。このWooden Trayは、まさに余白を作るためのアイテムです。\n\n朝食のセッティングに、ティータイムに、あるいはアクセサリーを置くトレイとして。使い方の幅が広いのも魅力ですが、何よりウォールナットの木目が美しい。\n\n一枚一枚、木目が異なるため、届いてから「自分だけの一点」に出会う感覚があります。オイルフィニッシュで仕上げられているので、使い込むほどに艶が増してくる。そんな経年変化も楽しみの一つです。`,
+    image: "https://images.unsplash.com/photo-1595599920606-6e4e29b56a2e?w=1200&h=700&fit=crop&q=85",
+    date: "2025.05.18", read_time: 4, tags: ["木工", "テーブル", "インテリア"],
+  },
+  {
+    id: "ar3", staff_id: "s3", product_id: "prod-6",
+    title: "花を飾る、ということ",
+    lead: "花を飾ることは、空間に対する敬意だと思っています。Glass Vaseが教えてくれた、シンプルな豊かさの話。",
+    body: `「花なんて特別な日だけ」と思っていた時期がありました。でも、このGlass Vaseを手に入れてから、毎週月曜日に近所の花屋で一束だけ買うようになりました。\n\n透明なガラスは、水の揺らぎと茎の影を空間に映します。花が変わるたびに、部屋の表情が変わる。それだけのことなのに、なぜかとても豊かな気持ちになる。\n\nシンプルで潔いフォルムは、どんな花にも合います。置く場所も選ばない。そういうものを作れる職人の技術に、静かな敬意を感じます。`,
+    image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=1200&h=700&fit=crop&q=85",
+    date: "2025.05.10", read_time: 3, tags: ["ガラス", "インテリア", "花"],
+  },
+  {
+    id: "ar4", staff_id: "s1", product_id: "prod-3",
+    title: "リネンポーチが変えた、バッグの中",
+    lead: "バッグの中がいつも散らかってしまう。そんな悩みを解消してくれたLinen Pouchとの出会い。",
+    body: `バイヤーとして荷物が多い私にとって、バッグの中の整理は永遠の課題でした。Linen Pouchに出会ったのは、京都のクラフトフェアでのこと。\n\n手触りが柔らかく、しかし丈夫。リネンの自然な風合いが、バッグの中に入れていても「主張しすぎない」のがいい。使い込むほど味が出てくる素材感も好きです。\n\nサイズ違いで3つ揃えて、コスメ用・充電器用・名刺用と分けています。バッグを変えるときも、ポーチごと移すだけ。朝の準備が少しだけ楽になりました。`,
+    image: "https://images.unsplash.com/photo-1558171813-32d9c6f8f38d?w=1200&h=700&fit=crop&q=85",
+    date: "2025.05.03", read_time: 3, tags: ["リネン", "整理", "バッグ"],
+  },
+  {
+    id: "ar5", staff_id: "s2", product_id: "prod-9",
+    title: "デスクに置いた、静かな重さ",
+    lead: "Paper Weightをデスクに置いた日から、仕事の集中力が変わった気がします。道具が持つ空気感について。",
+    body: `スタイリストとして常にビジュアルを意識している私が、最も長くデスクに置いているものがこのPaper Weightです。\n\n重さ230グラム。大理石の冷たさと、滑らかな質感。これをデスクに置くと、なぜか空間が締まる感じがします。\n\n「ただの重し」と思われるかもしれませんが、目に入るたびに「良いものに囲まれている」という実感が生まれる。それが仕事のモチベーションに繋がっている気がします。働く場所を丁寧に整えることの大切さを、この小さな道具が教えてくれました。`,
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=700&fit=crop&q=85",
+    date: "2025.04.22", read_time: 3, tags: ["デスク", "文具", "ミニマル"],
+  },
+  {
+    id: "ar6", staff_id: "s3", product_id: "prod-7",
+    title: "鉄のトレイが教えてくれた、素材の誠実さ",
+    lead: "Iron Trayを使い始めて1年。錆ひとつなく、むしろ美しくなっていくその姿に、素材の誠実さを感じます。",
+    body: `クリエイティブの仕事をしていると、「見た目が良いもの」と「本当に良いもの」の違いを常に考えます。このIron Trayは、後者の代表格です。\n\n購入前は「鉄製品はお手入れが大変そう」と思っていました。でも実際は、使った後に軽く拭くだけ。むしろその小さな手間が、道具への愛着を育てることに気づきました。\n\n1年経った今、表面には使い込んだ風合いが生まれています。「育てる道具」という感覚。長く使うことの喜びを、このトレイから学びました。`,
+    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=700&fit=crop&q=85",
+    date: "2025.04.15", read_time: 4, tags: ["鉄", "キッチン", "経年変化"],
+  },
+];
+
+const VIDEO_REVIEWS = [
+  {
+    id: "v1", staff_id: "s2", product_id: "prod-2",
+    title: "Wooden Tray の使い方、3スタイル",
+    description: "朝食・ティータイム・アクセサリー収納。一枚のトレイで変わる3つのシーンをご紹介します。",
+    youtube_id: "ScMzIvxBSi4",
+    thumbnail: "https://images.unsplash.com/photo-1595599920606-6e4e29b56a2e?w=800&h=450&fit=crop&q=80",
+    date: "2025.05.22", duration: "4:18", tags: ["木工", "スタイリング"],
+  },
+  {
+    id: "v2", staff_id: "s1", product_id: "prod-1",
+    title: "Ceramic Mug — 窯元訪問レポート",
+    description: "福岡の小さな工房を訪ねて。陶芸家・山田さんのこだわりと、マグが生まれるまでの工程を追いました。",
+    youtube_id: "BkDmGCIBJaY",
+    thumbnail: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=450&fit=crop&q=80",
+    date: "2025.05.15", duration: "7:42", tags: ["器", "陶芸", "工房"],
+  },
+  {
+    id: "v3", staff_id: "s3", product_id: "prod-6",
+    title: "小さな花を飾る、Glass Vaseスタイリング",
+    description: "季節の花をひと束。Glass Vaseに合わせるフラワースタイリングのコツを、クリエイティブ担当の木村が解説します。",
+    youtube_id: "L_LUpnjgPso",
+    thumbnail: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=800&h=450&fit=crop&q=80",
+    date: "2025.05.08", duration: "5:55", tags: ["フラワー", "インテリア"],
+  },
+  {
+    id: "v4", staff_id: "s1", product_id: "prod-10",
+    title: "Copper Spoon の「育て方」",
+    description: "銅製品は使うほどに美しくなる素材です。日々のお手入れと、経年変化の楽しみ方をご紹介。",
+    youtube_id: "OPf0YbXqDm0",
+    thumbnail: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&h=450&fit=crop&q=80",
+    date: "2025.04.28", duration: "3:50", tags: ["銅", "お手入れ", "経年変化"],
+  },
+  {
+    id: "v5", staff_id: "s3", product_id: "prod-4",
+    title: "Brass Clip で作る、デスクの美しい整理術",
+    description: "ただのクリップじゃない。真鍮の質感が映えるデスク整理のアイデアをスタイリスト視点でご提案します。",
+    youtube_id: "n_oEnK9n0CA",
+    thumbnail: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&h=450&fit=crop&q=80",
+    date: "2025.04.18", duration: "6:10", tags: ["文具", "デスク", "真鍮"],
+  },
+  {
+    id: "v6", staff_id: "s2", product_id: "prod-8",
+    title: "Cotton Towel の正しい洗い方と乾かし方",
+    description: "良いタオルを長く使うために。購入後の最初の洗い方から、ふんわり仕上げるコツまで。",
+    youtube_id: "Ks-_Mh1QhMc",
+    thumbnail: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&h=450&fit=crop&q=80",
+    date: "2025.04.10", duration: "4:05", tags: ["コットン", "お手入れ", "タオル"],
+  },
+];
+
 // ===== CSS =====
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
@@ -545,6 +654,111 @@ const css = `
   .pill.on { background: var(--accent); color: var(--black); border-color: var(--accent); }
   .pill:hover:not(.on) { border-color: var(--text3); color: var(--text); }
 
+  /* ── STAFF & VIDEO PAGES ── */
+  .story-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
+  .story-tab {
+    padding: .9rem 2rem; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer; background: none; border: none; color: var(--text3);
+    font-family: 'Noto Sans JP', sans-serif; border-bottom: 2px solid transparent;
+    margin-bottom: -1px; transition: all .2s;
+  }
+  .story-tab:hover { color: var(--text); }
+  .story-tab.on { color: var(--text); border-bottom-color: var(--accent); }
+
+  /* article grid */
+  .art-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); }
+  @media(max-width:900px){ .art-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .art-grid{grid-template-columns:1fr;} }
+  .art-card { background: var(--bg); cursor: pointer; transition: opacity .25s; }
+  .art-card:hover { opacity: .85; }
+  .art-card-img { height: 240px; overflow: hidden; position: relative; }
+  .art-card-img img { width:100%; height:100%; object-fit:cover; transition: transform .5s; }
+  .art-card:hover .art-card-img img { transform: scale(1.04); }
+  .art-card-body { padding: 1.4rem 1.5rem 1.8rem; }
+  .art-tag { font-size: .55rem; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; margin-bottom: .6rem; }
+  .art-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 300; line-height: 1.45; margin-bottom: .7rem; }
+  .art-lead { font-size: .75rem; color: var(--text2); line-height: 1.85; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .art-meta { display: flex; align-items: center; gap: .8rem; }
+  .art-avatar { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .art-avatar img { width:100%; height:100%; object-fit:cover; }
+  .art-staff-name { font-size: .65rem; color: var(--text3); }
+  .art-date { font-size: .62rem; color: var(--text3); margin-left: auto; }
+  .art-read { font-size: .6rem; color: var(--text3); }
+
+  /* article detail */
+  .art-detail-hero { width:100%; height:clamp(280px,40vw,500px); overflow:hidden; }
+  .art-detail-hero img { width:100%; height:100%; object-fit:cover; }
+  .art-detail-body { max-width: 720px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  .art-detail-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 300; line-height: 1.2; margin-bottom: 1.2rem; }
+  .art-detail-lead { font-size: .88rem; line-height: 2; color: var(--text2); margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+  .art-detail-text { font-size: .84rem; line-height: 2.2; color: var(--text2); white-space: pre-line; }
+  .art-staff-bar { display: flex; align-items: center; gap: 1rem; padding: 1.5rem 0; border-top: 1px solid var(--border); margin-top: 2.5rem; }
+  .art-staff-bar-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .art-staff-bar-avatar img { width:100%; height:100%; object-fit:cover; }
+  .art-staff-bar-role { font-size: .6rem; letter-spacing: .14em; color: var(--text3); text-transform: uppercase; margin-bottom: .25rem; }
+  .art-staff-bar-name { font-size: .85rem; color: var(--text); }
+  .art-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.8rem; }
+  .art-tag-pill { padding: .22rem .7rem; border: 1px solid var(--border); font-size: .62rem; color: var(--text3); letter-spacing: .06em; }
+
+  /* video grid */
+  .vid-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  @media(max-width:900px){ .vid-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .vid-grid{grid-template-columns:1fr;} }
+  .vid-card { cursor: pointer; transition: transform .25s; }
+  .vid-card:hover { transform: translateY(-3px); }
+  .vid-thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--bg2); }
+  .vid-thumb img { width:100%; height:100%; object-fit:cover; transition: transform .5s; }
+  .vid-card:hover .vid-thumb img { transform: scale(1.03); }
+  .vid-play {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(15,13,11,.35); transition: background .2s;
+  }
+  .vid-card:hover .vid-play { background: rgba(15,13,11,.55); }
+  .vid-play-btn {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(200,168,130,.9); display: flex; align-items: center; justify-content: center;
+    transition: transform .2s;
+  }
+  .vid-card:hover .vid-play-btn { transform: scale(1.1); }
+  .vid-duration {
+    position: absolute; bottom: .6rem; right: .7rem;
+    background: rgba(15,13,11,.8); color: var(--text); font-size: .62rem;
+    padding: .15rem .45rem; letter-spacing: .05em;
+  }
+  .vid-info { padding: .9rem 0 0; }
+  .vid-title { font-size: .84rem; line-height: 1.5; margin-bottom: .5rem; color: var(--text); }
+  .vid-meta { display: flex; align-items: center; gap: .6rem; }
+  .vid-avatar { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .vid-avatar img { width:100%; height:100%; object-fit:cover; }
+  .vid-staff { font-size: .62rem; color: var(--text3); }
+  .vid-date { font-size: .6rem; color: var(--text3); margin-left: auto; }
+
+  /* video modal */
+  .vid-modal-bg {
+    position: fixed; inset: 0; background: rgba(0,0,0,.88);
+    z-index: 500; display: flex; align-items: center; justify-content: center;
+    padding: 2rem; backdrop-filter: blur(8px);
+    animation: fadeIn .2s ease;
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .vid-modal {
+    width: 100%; max-width: 900px; background: var(--bg2);
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .vid-modal-player { position: relative; aspect-ratio: 16/9; background: #000; }
+  .vid-modal-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+  .vid-modal-info { padding: 1.5rem; }
+  .vid-modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; margin-bottom: .6rem; }
+  .vid-modal-desc { font-size: .78rem; line-height: 1.9; color: var(--text2); margin-bottom: 1rem; }
+  .vid-modal-close {
+    position: absolute; top: 1rem; right: 1rem; z-index: 10;
+    background: rgba(15,13,11,.7); border: 1px solid var(--border);
+    color: var(--text2); cursor: pointer; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; transition: color .2s;
+  }
+  .vid-modal-close:hover { color: var(--text); }
+
   /* ── FOOTER ── */
   .ftr { background: #080705; color: var(--text3); padding: 4rem 2rem 2rem; border-top: 1px solid var(--border); }
   .ftr-grid { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
@@ -658,6 +872,8 @@ export default function SelectShop() {
   const [settings, setSettings] = useState(INITIAL_SETTINGS);
   const [cart, setCart] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [adminPage, setAdminPage] = useState("dashboard");
   const [toast, setToast] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -665,6 +881,8 @@ export default function SelectShop() {
   const nav = (p, extra = {}) => {
     setPage(p);
     if (extra.product) setSelectedProduct(extra.product);
+    if (extra.article) setSelectedArticle(extra.article);
+    if (extra.video)   setSelectedVideo(extra.video);
     setDrawerOpen(false);
     window.scrollTo(0, 0);
   };
@@ -681,9 +899,10 @@ export default function SelectShop() {
 
   const drawerItems = [
     { label: "COLLECTION", page: "products" },
-    { label: "BRIDE",      page: "products" },
     { label: "NEW",        page: "new" },
     { label: "GIFT",       page: "best" },
+    { label: "STAFF REVIEW", page: "story" },
+    { label: "VIDEO",      page: "video" },
     { label: "ABOUT",      page: "about" },
   ];
 
@@ -733,8 +952,8 @@ export default function SelectShop() {
           <div className="hdr-in">
             <span className="logo" onClick={() => nav("home")}>{settings.shopName}</span>
             <nav className="nav">
-              {[["products","COLLECTION"],["products","BRIDE"],["new","NEW"],["best","GIFT"]].map(([p,l]) => (
-                <button key={l} className={`nl ${(page===p&&l!=="BRIDE"&&l!=="GIFT")?"on":""}`} onClick={() => nav(p)}>{l}</button>
+              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"]].map(([p,l]) => (
+                <button key={l} className={`nl ${page===p?"on":""}`} onClick={() => nav(p)}>{l}</button>
               ))}
             </nav>
             <div className="hdr-r">
@@ -763,14 +982,17 @@ export default function SelectShop() {
         </header>
       </>}
 
-      {page === "home"           && <HomePage    products={products} categories={categories} settings={settings} nav={nav} addToCart={addToCart} />}
-      {page === "products"       && <ProductsPage products={products} categories={categories} nav={nav} />}
-      {page === "new"            && <FilteredPage products={products.filter(p=>p.is_new)} categories={categories} nav={nav} title="New Arrivals" label="New" />}
-      {page === "best"           && <FilteredPage products={products.filter(p=>p.is_best_seller)} categories={categories} nav={nav} title="Best Sellers" label="Gift" />}
-      {page === "product-detail" && <DetailPage  product={selectedProduct} products={products} categories={categories} nav={nav} addToCart={addToCart} />}
-      {page === "cart"           && <CartPage    cart={cart} setCart={setCart} nav={nav} settings={settings} />}
-      {page === "about"          && <AboutPage   settings={settings} />}
-      {page === "admin"          && <AdminPage   categories={categories} setCategories={setCategories} products={products} setProducts={setProducts} settings={settings} setSettings={setSettings} nav={nav} adminPage={adminPage} setAdminPage={setAdminPage} />}
+      {page === "home"            && <HomePage       products={products} categories={categories} settings={settings} nav={nav} addToCart={addToCart} />}
+      {page === "products"        && <ProductsPage   products={products} categories={categories} nav={nav} />}
+      {page === "new"             && <FilteredPage   products={products.filter(p=>p.is_new)} categories={categories} nav={nav} title="New Arrivals" label="New" />}
+      {page === "best"            && <FilteredPage   products={products.filter(p=>p.is_best_seller)} categories={categories} nav={nav} title="Best Sellers" label="Gift" />}
+      {page === "product-detail"  && <DetailPage     product={selectedProduct} products={products} categories={categories} nav={nav} addToCart={addToCart} />}
+      {page === "cart"            && <CartPage       cart={cart} setCart={setCart} nav={nav} settings={settings} />}
+      {page === "about"           && <AboutPage      settings={settings} />}
+      {page === "story"           && <StaffStoryPage nav={nav} products={products} />}
+      {page === "article-detail"  && <ArticleDetailPage article={selectedArticle} nav={nav} products={products} addToCart={addToCart} />}
+      {page === "video"           && <VideoPage      nav={nav} products={products} />}
+      {page === "admin"           && <AdminPage      categories={categories} setCategories={setCategories} products={products} setProducts={setProducts} settings={settings} setSettings={setSettings} nav={nav} adminPage={adminPage} setAdminPage={setAdminPage} />}
     </div>
   );
 }
@@ -1863,6 +2085,280 @@ function AdminSettings({ settings, setSettings }) {
       <div style={{display:"flex",gap:"1rem",alignItems:"center"}}>
         <button className="btn btn-p" onClick={save}>設定を保存する</button>
         {saved && <span style={{fontSize:".75rem",color:"var(--accent)"}}>✓ 保存しました</span>}
+      </div>
+    </div>
+  );
+}
+
+// ── STAFF STORY PAGE ──
+function StaffStoryPage({ nav, products }) {
+  const [tab, setTab] = useState("articles");
+
+  return (
+    <div className="pe">
+      <div className="page-hdr">
+        <div className="page-hdr-in">
+          <div className="sl">STAFF REVIEW</div>
+          <h1 className="fd" style={{fontSize:"2.5rem",fontWeight:300}}>スタッフが語る、選ばれた理由</h1>
+          <p style={{fontSize:".78rem",color:"var(--text3)",marginTop:".6rem",maxWidth:"50ch"}}>
+            CKD SHOPのバイヤー・スタイリスト・クリエイティブチームが、商品との出会いと使い心地を正直に綴ります。
+          </p>
+        </div>
+      </div>
+
+      <div className="sec" style={{paddingTop:"2.5rem"}}>
+        {/* Tabs */}
+        <div className="story-tabs">
+          <button className={`story-tab ${tab==="articles"?"on":""}`} onClick={()=>setTab("articles")}>
+            記事レビュー（{STAFF_ARTICLES.length}件）
+          </button>
+          <button className={`story-tab ${tab==="videos"?"on":""}`} onClick={()=>setTab("videos")}>
+            動画レビュー（{VIDEO_REVIEWS.length}件）
+          </button>
+        </div>
+
+        {tab === "articles" && (
+          <div className="art-grid">
+            {STAFF_ARTICLES.map(article => {
+              const staff = STAFF_MEMBERS.find(s=>s.id===article.staff_id);
+              return (
+                <div className="art-card" key={article.id} onClick={()=>nav("article-detail",{article})}>
+                  <div className="art-card-img">
+                    <img src={article.image} alt={article.title} loading="lazy" />
+                  </div>
+                  <div className="art-card-body">
+                    <div className="art-tag">STAFF REVIEW · {article.read_time} min read</div>
+                    <div className="art-title fd">{article.title}</div>
+                    <div className="art-lead">{article.lead}</div>
+                    <div className="art-meta">
+                      {staff && (
+                        <>
+                          <div className="art-avatar">
+                            <img src={staff.image} alt={staff.name_jp} onError={e=>{e.currentTarget.style.display="none";}} />
+                          </div>
+                          <div>
+                            <div className="art-staff-name">{staff.name_jp}</div>
+                            <div className="art-read">{staff.role}</div>
+                          </div>
+                        </>
+                      )}
+                      <div className="art-date">{article.date}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {tab === "videos" && <VideoGrid nav={nav} products={products} />}
+      </div>
+    </div>
+  );
+}
+
+// ── ARTICLE DETAIL PAGE ──
+function ArticleDetailPage({ article, nav, products, addToCart }) {
+  if (!article) return <div className="empty"><div className="empty-t">記事が見つかりません</div></div>;
+  const staff = STAFF_MEMBERS.find(s=>s.id===article.staff_id);
+  const product = products.find(p=>p.id===article.product_id);
+
+  return (
+    <div className="pe">
+      {/* Hero */}
+      <div style={{paddingTop:"60px"}}>
+        <div className="art-detail-hero">
+          <img src={article.image} alt={article.title} />
+        </div>
+      </div>
+
+      <div className="art-detail-body">
+        {/* Breadcrumb */}
+        <div className="bc" style={{marginBottom:"1.5rem"}}>
+          <span onClick={()=>nav("home")}>Home</span> ›
+          <span onClick={()=>nav("story")}>Staff Review</span> ›
+          <span>{article.title}</span>
+        </div>
+
+        {/* Category */}
+        <div className="art-tag" style={{marginBottom:"1rem"}}>STAFF REVIEW · {article.read_time} min read</div>
+
+        {/* Title */}
+        <h1 className="art-detail-title">{article.title}</h1>
+
+        {/* Staff bar */}
+        {staff && (
+          <div className="art-staff-bar">
+            <div className="art-staff-bar-avatar">
+              <img src={staff.image} alt={staff.name_jp} onError={e=>{e.currentTarget.style.background="#2a1f1a";e.currentTarget.style.display="none";}} />
+            </div>
+            <div>
+              <div className="art-staff-bar-role">{staff.role}</div>
+              <div className="art-staff-bar-name">{staff.name_jp}</div>
+            </div>
+            <div style={{marginLeft:"auto",fontSize:".65rem",color:"var(--text3)"}}>{article.date}</div>
+          </div>
+        )}
+
+        {/* Lead */}
+        <p className="art-detail-lead">{article.lead}</p>
+
+        {/* Body */}
+        <div className="art-detail-text">{article.body}</div>
+
+        {/* Tags */}
+        <div className="art-tags">
+          {article.tags.map(t=><span className="art-tag-pill" key={t}>{t}</span>)}
+        </div>
+
+        {/* Related product */}
+        {product && (
+          <div style={{marginTop:"3rem",padding:"1.5rem",background:"var(--bg2)",border:"1px solid var(--border)"}}>
+            <div className="sl" style={{marginBottom:"1rem"}}>この記事で紹介した商品</div>
+            <div style={{display:"flex",gap:"1.2rem",alignItems:"center",cursor:"pointer"}}
+              onClick={()=>nav("product-detail",{product})}>
+              <div style={{width:72,height:96,overflow:"hidden",flexShrink:0}}>
+                <img src={product.image} alt={product.name} style={{width:"100%",height:"100%",objectFit:"cover"}} loading="lazy" />
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:".72rem",color:"var(--text3)",marginBottom:".3rem"}}>{product.material}</div>
+                <div style={{fontSize:".9rem",marginBottom:".4rem"}}>{product.name}</div>
+                <div style={{fontSize:".82rem",color:"var(--accent)"}}>¥{product.price.toLocaleString()}</div>
+              </div>
+              <button className="btn btn-a btn-sm" onClick={e=>{e.stopPropagation();addToCart(product,1);}}>
+                カートに入れる
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* More articles */}
+      <div className="sec" style={{paddingTop:0}}>
+        <hr className="divider" />
+        <div className="sl">OTHER REVIEWS</div>
+        <h2 className="fd" style={{fontSize:"1.6rem",fontWeight:300,marginBottom:"2rem"}}>他のスタッフレビュー</h2>
+        <div className="art-grid">
+          {STAFF_ARTICLES.filter(a=>a.id!==article.id).slice(0,3).map(a=>{
+            const s = STAFF_MEMBERS.find(x=>x.id===a.staff_id);
+            return (
+              <div className="art-card" key={a.id} onClick={()=>nav("article-detail",{article:a})}>
+                <div className="art-card-img"><img src={a.image} alt={a.title} loading="lazy" /></div>
+                <div className="art-card-body">
+                  <div className="art-tag">STAFF REVIEW</div>
+                  <div className="art-title fd">{a.title}</div>
+                  <div className="art-meta">
+                    {s && <><div className="art-avatar"><img src={s.image} alt={s.name_jp} /></div><div className="art-staff-name">{s.name_jp}</div></>}
+                    <div className="art-date">{a.date}</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── VIDEO GRID (shared component) ──
+function VideoGrid({ nav, products }) {
+  const [activeVideo, setActiveVideo] = useState(null);
+
+  return (
+    <>
+      <div className="vid-grid">
+        {VIDEO_REVIEWS.map(video => {
+          const staff = STAFF_MEMBERS.find(s=>s.id===video.staff_id);
+          return (
+            <div className="vid-card" key={video.id} onClick={()=>setActiveVideo(video)}>
+              <div className="vid-thumb">
+                <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                <div className="vid-play">
+                  <div className="vid-play-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#0f0d0b">
+                      <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="vid-duration">{video.duration}</div>
+              </div>
+              <div className="vid-info">
+                <div className="vid-title">{video.title}</div>
+                <div className="vid-meta">
+                  {staff && (
+                    <>
+                      <div className="vid-avatar"><img src={staff.image} alt={staff.name_jp} /></div>
+                      <div className="vid-staff">{staff.name_jp} · {staff.role}</div>
+                    </>
+                  )}
+                  <div className="vid-date">{video.date}</div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Video Modal */}
+      {activeVideo && (
+        <div className="vid-modal-bg" onClick={()=>setActiveVideo(null)}>
+          <div className="vid-modal" onClick={e=>e.stopPropagation()} style={{position:"relative"}}>
+            <button className="vid-modal-close" onClick={()=>setActiveVideo(null)}>✕</button>
+            <div className="vid-modal-player">
+              <iframe
+                src={`https://www.youtube.com/embed/${activeVideo.youtube_id}?autoplay=1&rel=0`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={activeVideo.title}
+              />
+            </div>
+            <div className="vid-modal-info">
+              <div className="vid-modal-title fd">{activeVideo.title}</div>
+              <div className="vid-modal-desc">{activeVideo.description}</div>
+              {(() => {
+                const staff = STAFF_MEMBERS.find(s=>s.id===activeVideo.staff_id);
+                const product = products?.find(p=>p.id===activeVideo.product_id);
+                return (
+                  <div style={{display:"flex",alignItems:"center",gap:".8rem",flexWrap:"wrap"}}>
+                    {staff && (
+                      <div style={{display:"flex",alignItems:"center",gap:".5rem"}}>
+                        <div className="vid-avatar" style={{width:28,height:28}}><img src={staff.image} alt={staff.name_jp} /></div>
+                        <span style={{fontSize:".7rem",color:"var(--text3)"}}>{staff.name_jp} · {staff.role}</span>
+                      </div>
+                    )}
+                    {product && (
+                      <span style={{fontSize:".7rem",color:"var(--accent)",marginLeft:"auto",cursor:"pointer"}}
+                        onClick={()=>{setActiveVideo(null);nav("product-detail",{product});}}>
+                        商品を見る →
+                      </span>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ── VIDEO PAGE ──
+function VideoPage({ nav, products }) {
+  return (
+    <div className="pe">
+      <div className="page-hdr">
+        <div className="page-hdr-in">
+          <div className="sl">VIDEO REVIEW</div>
+          <h1 className="fd" style={{fontSize:"2.5rem",fontWeight:300}}>動画でわかる、商品の魅力</h1>
+          <p style={{fontSize:".78rem",color:"var(--text3)",marginTop:".6rem",maxWidth:"50ch"}}>
+            スタッフが実際に使い、撮影した動画レビュー。テキストでは伝えきれない素材感や使い心地をお届けします。
+          </p>
+        </div>
+      </div>
+      <div className="sec">
+        <VideoGrid nav={nav} products={products} />
       </div>
     </div>
   );
