@@ -38,6 +38,38 @@ const PRODUCT_COLORS = [
   "#261e1e","#1e2218","#221a1e","#1a1a1a","#2a1e18",
 ];
 
+// Unsplash curated images for each product type (zakka / minimal lifestyle)
+const PRODUCT_IMAGES = [
+  "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=800&fit=crop&q=80", // ceramic mug
+  "https://images.unsplash.com/photo-1595599920606-6e4e29b56a2e?w=600&h=800&fit=crop&q=80", // wooden tray
+  "https://images.unsplash.com/photo-1558171813-32d9c6f8f38d?w=600&h=800&fit=crop&q=80", // linen pouch
+  "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&h=800&fit=crop&q=80", // stationery/clip
+  "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&h=800&fit=crop&q=80", // stone coaster
+  "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=600&h=800&fit=crop&q=80", // glass vase
+  "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=800&fit=crop&q=80", // iron tray / kitchen
+  "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&h=800&fit=crop&q=80", // cotton towel
+  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=800&fit=crop&q=80", // paper weight / desk
+  "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&h=800&fit=crop&q=80", // copper spoon / cutlery
+  "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=600&h=800&fit=crop&q=80", // washi tape / craft
+];
+
+// Mood category images
+const MOOD_IMAGES = [
+  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=300&h=400&fit=crop&q=70",
+  "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=400&fit=crop&q=70",
+  "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=300&h=400&fit=crop&q=70",
+  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=400&fit=crop&q=70",
+  "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300&h=400&fit=crop&q=70",
+  "https://images.unsplash.com/photo-1525498128493-380d1990a112?w=300&h=400&fit=crop&q=70",
+];
+
+// Journal images
+const JOURNAL_IMAGES = [
+  "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&h=500&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=500&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1595599920606-6e4e29b56a2e?w=800&h=500&fit=crop&q=80",
+];
+
 function generateProducts() {
   const products = [];
   for (let i = 0; i < 44; i++) {
@@ -65,6 +97,7 @@ function generateProducts() {
       size: ["W8×H9cm", "W24×D16cm", "φ9cm", "W12×H8cm", "フリー"][i % 5],
       color_name: ["ナチュラル", "スモークブラック", "アッシュグレー", "ウォールナット", "クリア"][i % 5],
       color: PRODUCT_COLORS[i % PRODUCT_COLORS.length],
+      image: PRODUCT_IMAGES[i % PRODUCT_IMAGES.length],
     });
   }
   return products;
@@ -82,9 +115,9 @@ const INITIAL_SETTINGS = {
 };
 
 const JOURNAL_POSTS = [
-  { id: 1, category: "STORY",       title: "つくり手の背景にあるもの",   date: "2025.05.20", color: "#2a1f1a" },
-  { id: 2, category: "JOURNAL",     title: "素材から選ぶ、器の楽しみ方", date: "2025.05.12", color: "#1a1f2a" },
-  { id: 3, category: "STYLE GUIDE", title: "長く使えるものを選ぶ基準",   date: "2025.04.28", color: "#261a1f" },
+  { id: 1, category: "STORY",       title: "つくり手の背景にあるもの",   date: "2025.05.20", color: "#2a1f1a", image: JOURNAL_IMAGES[0] },
+  { id: 2, category: "JOURNAL",     title: "素材から選ぶ、器の楽しみ方", date: "2025.05.12", color: "#1a1f2a", image: JOURNAL_IMAGES[1] },
+  { id: 3, category: "STYLE GUIDE", title: "長く使えるものを選ぶ基準",   date: "2025.04.28", color: "#261a1f", image: JOURNAL_IMAGES[2] },
 ];
 
 // ===== CSS =====
@@ -531,7 +564,17 @@ const css = `
 `;
 
 // ── helpers ──
-function Placeholder({ color = "#2a1f1a", style = {}, className = "" }) {
+function Placeholder({ color = "#2a1f1a", image = null, style = {}, className = "", alt = "" }) {
+  if (image) {
+    return (
+      <img
+        src={image} alt={alt}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", ...style }}
+        loading="lazy"
+        onError={e => { e.currentTarget.style.display = "none"; e.currentTarget.parentElement.style.background = color; }}
+      />
+    );
+  }
   return (
     <div className={className} style={{
       background: color, width: "100%", height: "100%",
@@ -552,7 +595,7 @@ function ProductCard({ product, categories, onClick }) {
     <div className="pc pe" onClick={() => onClick(product)}>
       <div className="pc-img">
         <div className="pc-img-inner">
-          <Placeholder color={product.color} style={{width:"100%",height:"100%"}} />
+          <Placeholder color={product.color} image={product.image} alt={product.name} style={{width:"100%",height:"100%"}} />
         </div>
         <div className="pc-badges">
           {product.is_new && <span className="b-tag b-new">New</span>}
@@ -789,15 +832,16 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
           <span className="view-all" onClick={() => nav("products")}>VIEW ALL</span>
         </div>
         <div className="mood-scroll">
-          {MOOD_CATEGORIES.map(mood => (
+          {MOOD_CATEGORIES.map((mood, idx) => (
             <div className="mood-card" key={mood.id} onClick={() => nav("products")}>
               <div className="mood-img">
-                <div className="mood-img-inner" style={{background:mood.color}}>
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" opacity="0.3">
-                    <circle cx="16" cy="16" r="12" stroke="#c8a882" strokeWidth="0.8"/>
-                    <path d="M10 16 Q16 10 22 16 Q16 22 10 16Z" stroke="#c8a882" strokeWidth="0.8" fill="none"/>
-                  </svg>
-                </div>
+                <img
+                  src={MOOD_IMAGES[idx]}
+                  alt={mood.jp}
+                  style={{width:"100%",height:"100%",objectFit:"cover",display:"block",filter:"brightness(0.7)"}}
+                  loading="lazy"
+                  onError={e=>{e.currentTarget.style.display="none";e.currentTarget.parentElement.style.background=mood.color;}}
+                />
               </div>
               <div className="mood-label">{mood.label}</div>
               <div className="mood-jp">{mood.jp}</div>
@@ -823,7 +867,7 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
               <div className="coll-item" onClick={() => nav("product-detail", {product: collItems[0]})}>
                 <div className="coll-img" style={{height:"600px"}}>
                   <div className="coll-img-inner" style={{height:"100%"}}>
-                    <Placeholder color={collItems[0]?.color} style={{width:"100%",height:"100%"}} />
+                    <Placeholder color={collItems[0]?.color} image={collItems[0]?.image} alt={collItems[0]?.name} style={{width:"100%",height:"100%"}} />
                   </div>
                 </div>
                 <div className="coll-info">
@@ -836,7 +880,7 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
               <div className="coll-item" key={p.id} onClick={() => nav("product-detail", {product: p})}>
                 <div className="coll-img coll-img-other">
                   <div className="coll-img-inner" style={{height:"100%"}}>
-                    <Placeholder color={p.color} style={{width:"100%",height:"100%"}} />
+                    <Placeholder color={p.color} image={p.image} alt={p.name} style={{width:"100%",height:"100%"}} />
                   </div>
                 </div>
                 <div className="coll-info">
@@ -901,7 +945,7 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
               <div className="jcard" key={post.id}>
                 <div className="jcard-img">
                   <div className="jcard-img-inner">
-                    <Placeholder color={post.color} style={{width:"100%",height:"100%"}} />
+                    <Placeholder color={post.color} image={post.image} alt={post.title} style={{width:"100%",height:"100%"}} />
                   </div>
                 </div>
                 <div className="jcard-info">
@@ -1081,12 +1125,12 @@ function DetailPage({ product, products, categories, nav, addToCart }) {
         <div className="pd">
           <div>
             <div style={{aspectRatio:"3/4",overflow:"hidden"}}>
-              <Placeholder color={product.color} style={{width:"100%",height:"100%"}} />
+              <Placeholder color={product.color} image={product.image} alt={product.name} style={{width:"100%",height:"100%"}} />
             </div>
             <div className="gthumb">
               {[...Array(4)].map((_,i) => (
                 <div className={`gth ${i===0?"on":""}`} key={i}>
-                  <Placeholder color={product.color} style={{opacity:i===0?1:0.4,width:"100%",height:"100%"}} />
+                  <Placeholder color={product.color} image={product.image} alt={product.name} style={{opacity:i===0?1:0.5,width:"100%",height:"100%"}} />
                 </div>
               ))}
             </div>
@@ -1177,7 +1221,7 @@ function CartPage({ cart, setCart, nav, settings }) {
             {cart.map(item => (
               <div className="ci" key={item.id}>
                 <div style={{aspectRatio:"3/4",overflow:"hidden"}}>
-                  <Placeholder color={item.color} style={{width:"100%",height:"100%"}} />
+                  <Placeholder color={item.color} image={item.image} alt={item.name} style={{width:"100%",height:"100%"}} />
                 </div>
                 <div>
                   <div className="ci-name">{item.name}</div>
