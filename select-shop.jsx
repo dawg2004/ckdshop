@@ -965,6 +965,8 @@ const IconMenu = () => (
   </svg>
 );
 
+const ADMIN_PASSWORD = "1234";
+
 // ── APP ──
 export default function SelectShop() {
   const [page, setPage] = useState("home");
@@ -977,6 +979,9 @@ export default function SelectShop() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [adminPage, setAdminPage] = useState("dashboard");
   const [toast, setToast] = useState(null);
+  const [adminAuthed, setAdminAuthed] = useState(false);
+  const [adminPwInput, setAdminPwInput] = useState("");
+  const [adminPwError, setAdminPwError] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const nav = (p, extra = {}) => {
@@ -1107,7 +1112,30 @@ export default function SelectShop() {
       {page === "article-detail"  && <ArticleDetailPage article={selectedArticle} nav={nav} products={products} addToCart={addToCart} />}
       {page === "video"           && <VideoPage        nav={nav} products={products} />}
       {page === "live"            && <LiveConsultPage nav={nav} products={products} addToCart={addToCart} />}
-      {page === "admin"           && <AdminPage      categories={categories} setCategories={setCategories} products={products} setProducts={setProducts} settings={settings} setSettings={setSettings} nav={nav} adminPage={adminPage} setAdminPage={setAdminPage} />}
+      {page === "admin" && (!adminAuthed ? (
+        <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--bg)"}}>
+          <div style={{width:"100%",maxWidth:360,padding:"2.5rem",background:"var(--srf)",border:"1px solid var(--bdr)",borderRadius:4}}>
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.6rem",fontWeight:300,color:"var(--text1)",marginBottom:".4rem",textAlign:"center"}}>管理画面</div>
+            <div style={{fontSize:".7rem",color:"var(--text3)",letterSpacing:".1em",textAlign:"center",marginBottom:"2rem"}}>ADMIN</div>
+            <form onSubmit={e=>{e.preventDefault();if(adminPwInput===ADMIN_PASSWORD){setAdminAuthed(true);setAdminPwError(false);}else{setAdminPwError(true);setAdminPwInput("");}}} style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
+              <div>
+                <label style={{fontSize:".7rem",color:"var(--text3)",letterSpacing:".1em",display:"block",marginBottom:".4rem"}}>パスワード</label>
+                <input type="password" autoFocus value={adminPwInput} onChange={e=>{setAdminPwInput(e.target.value);setAdminPwError(false);}}
+                  style={{width:"100%",padding:".75rem .9rem",background:"var(--bg)",border:`1px solid ${adminPwError?"#c07a7a":"var(--bdr)"}`,color:"var(--text1)",fontSize:".9rem",borderRadius:2,boxSizing:"border-box",outline:"none"}} />
+                {adminPwError && <div style={{fontSize:".7rem",color:"#c07a7a",marginTop:".4rem"}}>パスワードが違います</div>}
+              </div>
+              <button type="submit" style={{padding:".8rem",background:"var(--accent)",color:"#0f0d0b",fontSize:".78rem",letterSpacing:".15em",border:"none",borderRadius:2,cursor:"pointer",fontWeight:600}}>
+                ログイン
+              </button>
+              <button type="button" onClick={()=>nav("home")} style={{padding:".6rem",background:"transparent",color:"var(--text3)",fontSize:".72rem",border:"none",cursor:"pointer"}}>
+                ← ショップに戻る
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <AdminPage categories={categories} setCategories={setCategories} products={products} setProducts={setProducts} settings={settings} setSettings={setSettings} nav={nav} adminPage={adminPage} setAdminPage={setAdminPage} onLogout={()=>{setAdminAuthed(false);setAdminPwInput("");}} />
+      ))}
     </div>
   );
 }
@@ -1619,7 +1647,7 @@ function AboutPage({ settings }) {
 }
 
 // ── ADMIN ──
-function AdminPage({ categories, setCategories, products, setProducts, settings, setSettings, nav, adminPage, setAdminPage }) {
+function AdminPage({ categories, setCategories, products, setProducts, settings, setSettings, nav, adminPage, setAdminPage, onLogout }) {
   const [editProd, setEditProd] = useState(null);
   const [editCat, setEditCat] = useState(null);
 
@@ -1644,6 +1672,7 @@ function AdminPage({ categories, setCategories, products, setProducts, settings,
         ))}
         <div style={{borderTop:"1px solid var(--border)",marginTop:"1rem",paddingTop:"1rem"}}>
           <div className="adm-ni" onClick={() => nav("home")}><span>⬡</span>サイトを見る</div>
+          <div className="adm-ni" onClick={onLogout} style={{color:"#c07a7a"}}><span>⎋</span>ログアウト</div>
         </div>
       </aside>
       <main className="adm-main">
