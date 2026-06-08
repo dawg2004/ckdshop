@@ -1004,7 +1004,7 @@ export default function SelectShop() {
     { label: "GIFT",         page: "best" },
     { label: "STAFF REVIEW", page: "story" },
     { label: "VIDEO",        page: "video" },
-    { label: "LIVE 接客",    page: "live" },
+    { label: "LIVECHAT",     page: "live" },
     { label: "ABOUT",        page: "about" },
   ];
 
@@ -1054,7 +1054,7 @@ export default function SelectShop() {
           <div className="hdr-in">
             <span className="logo" onClick={() => nav("home")}>{settings.shopName}</span>
             <nav className="nav">
-              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"],["live","LIVE"]].map(([p,l]) => (
+              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"],["live","LIVECHAT"]].map(([p,l]) => (
                 <button key={l} className={`nl ${page===p?"on":""}`} onClick={() => nav(p)}>{l}</button>
               ))}
             </nav>
