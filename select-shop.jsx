@@ -1031,7 +1031,7 @@ export default function SelectShop() {
           <button onClick={() => setDrawerOpen(false)} style={{background:"none",border:"none",cursor:"pointer",color:"#5a5048",fontSize:"1.1rem"}}>✕</button>
         </div>
         <nav style={{flex:1,paddingTop:"1rem"}}>
-          {drawerItems.map(item => (
+          {drawerItems.filter(item => item.page !== "live").map(item => (
             <button key={item.label} onClick={() => nav(item.page)} style={{
               display:"block", width:"100%", textAlign:"left",
               padding:"1rem 1.5rem", background:"none", border:"none",
@@ -1043,6 +1043,17 @@ export default function SelectShop() {
             onMouseLeave={e=>e.currentTarget.style.color="#a09080"}
             >{item.label}</button>
           ))}
+          <a href="https://www.beyourlover.co.jp/app-toys" target="_blank" rel="noopener noreferrer" style={{
+            display:"block", width:"100%", textAlign:"left",
+            padding:"1rem 1.5rem", background:"none",
+            borderBottom:"1px solid #1e1a14", cursor:"pointer",
+            fontSize:"0.8rem", letterSpacing:"0.16em", color:"#a09080",
+            fontFamily:"'Noto Sans JP',sans-serif", transition:"color 0.15s",
+            textDecoration:"none", boxSizing:"border-box",
+          }}
+          onMouseEnter={e=>e.currentTarget.style.color="#f0ece5"}
+          onMouseLeave={e=>e.currentTarget.style.color="#a09080"}
+          >LIVECHAT</a>
         </nav>
         <div style={{padding:"1.5rem",borderTop:"1px solid #2e2820",fontSize:"0.65rem",letterSpacing:"0.2em",color:"#5a5048"}}>
           {settings.contactEmail}
@@ -1054,9 +1065,10 @@ export default function SelectShop() {
           <div className="hdr-in">
             <span className="logo" onClick={() => nav("home")}>{settings.shopName}</span>
             <nav className="nav">
-              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"],["live","LIVECHAT"]].map(([p,l]) => (
+              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"]].map(([p,l]) => (
                 <button key={l} className={`nl ${page===p?"on":""}`} onClick={() => nav(p)}>{l}</button>
               ))}
+              <a href="https://www.beyourlover.co.jp/app-toys" target="_blank" rel="noopener noreferrer" className="nl" style={{textDecoration:"none"}}>LIVECHAT</a>
             </nav>
             <div className="hdr-r">
               <button className="ib"><IconSearch /></button>
