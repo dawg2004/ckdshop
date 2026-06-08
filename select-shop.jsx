@@ -654,6 +654,107 @@ const css = `
   .pill.on { background: var(--accent); color: var(--black); border-color: var(--accent); }
   .pill:hover:not(.on) { border-color: var(--text3); color: var(--text); }
 
+  /* ── LIVE CONSULT PAGE ── */
+  .lc-hero {
+    min-height: 60vh; display: flex; align-items: center;
+    background: linear-gradient(135deg,#120e08 0%,#0f0d0b 60%,#181008 100%);
+    padding: 8rem 2rem 5rem; position: relative; overflow: hidden;
+  }
+  .lc-hero::before {
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(200,168,130,0.06) 0%, transparent 60%);
+  }
+  .lc-hero-in { max-width:1440px; margin:0 auto; width:100%; position:relative;z-index:1; }
+  .lc-badge {
+    display:inline-flex; align-items:center; gap:.6rem;
+    padding:.4rem .9rem; border:1px solid rgba(200,168,130,.3);
+    font-size:.6rem; letter-spacing:.2em; color:var(--accent); text-transform:uppercase;
+    margin-bottom:2rem;
+  }
+  .lc-badge-dot {
+    width:7px;height:7px;border-radius:50%;background:var(--accent);
+    animation:pulse 2s ease infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+  .lc-h { font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,4.5vw,4.5rem); font-weight:300; line-height:1.1; margin-bottom:1.4rem; }
+  .lc-sub { font-size:.82rem; line-height:2; color:var(--text2); max-width:46ch; margin-bottom:2.5rem; }
+  .lc-btns { display:flex; gap:1rem; flex-wrap:wrap; }
+  .lc-staff-row { display:flex; gap:-.5rem; margin-top:2.5rem; align-items:center; }
+  .lc-staff-avatar { width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--bg);margin-left:-8px; }
+  .lc-staff-avatar:first-child{margin-left:0;}
+  .lc-staff-avatar img{width:100%;height:100%;object-fit:cover;}
+  .lc-staff-text { margin-left:.8rem; font-size:.7rem; color:var(--text3); }
+  .lc-avail { color:var(--accent); }
+
+  /* How it works */
+  .lc-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+  @media(max-width:768px){.lc-steps{grid-template-columns:1fr;}}
+  .lc-step { padding:2rem; border:1px solid var(--border); position:relative; }
+  .lc-step-num { font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:300; color:var(--border); line-height:1; margin-bottom:1rem; }
+  .lc-step-title { font-size:.85rem; font-weight:500; margin-bottom:.6rem; }
+  .lc-step-desc { font-size:.76rem; color:var(--text2); line-height:1.9; }
+
+  /* Staff cards */
+  .lc-staff-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+  @media(max-width:768px){.lc-staff-grid{grid-template-columns:1fr;}}
+  .lc-staff-card { background:var(--bg2); border:1px solid var(--border); overflow:hidden; }
+  .lc-staff-card-img { height:220px; overflow:hidden; }
+  .lc-staff-card-img img { width:100%;height:100%;object-fit:cover;object-position:top; transition:transform .5s; }
+  .lc-staff-card:hover .lc-staff-card-img img{transform:scale(1.04);}
+  .lc-staff-card-body{padding:1.3rem 1.5rem;}
+  .lc-staff-role{font-size:.58rem;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:.4rem;}
+  .lc-staff-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;margin-bottom:.5rem;}
+  .lc-staff-bio{font-size:.74rem;color:var(--text2);line-height:1.85;margin-bottom:1rem;}
+  .lc-avail-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.62rem;color:var(--accent);}
+  .lc-avail-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite;}
+
+  /* Form overlay */
+  .lc-form-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:400;
+    display:flex;align-items:center;justify-content:center;padding:2rem;
+    backdrop-filter:blur(8px);animation:fadeIn .2s ease;
+  }
+  .lc-form-box{
+    background:var(--bg2);border:1px solid var(--border);
+    width:100%;max-width:480px;padding:2.5rem;position:relative;
+  }
+  .lc-form-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text3);cursor:pointer;font-size:1.1rem;}
+
+  /* Video room */
+  .lc-room{
+    position:fixed;inset:0;z-index:600;background:var(--bg);
+    display:flex;flex-direction:column;
+  }
+  .lc-room-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);
+    flex-shrink:0;
+  }
+  .lc-room-title{font-size:.78rem;letter-spacing:.06em;}
+  .lc-room-id{font-size:.62rem;color:var(--text3);margin-top:.15rem;}
+  .lc-room-body{display:flex;flex:1;overflow:hidden;}
+  .lc-room-iframe{flex:1;border:none;}
+  .lc-room-panel{
+    width:280px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);
+    display:flex;flex-direction:column;overflow-y:auto;
+  }
+  @media(max-width:900px){.lc-room-panel{display:none;}}
+  .lc-room-panel-sec{padding:1.2rem 1.3rem;border-bottom:1px solid var(--border);}
+  .lc-room-panel-title{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:.8rem;}
+  .lc-panel-prod{display:flex;gap:.8rem;cursor:pointer;margin-bottom:.8rem;padding:.6rem;border:1px solid transparent;transition:border-color .2s;}
+  .lc-panel-prod:hover{border-color:var(--border);}
+  .lc-panel-prod img{width:44px;height:58px;object-fit:cover;flex-shrink:0;}
+  .lc-panel-prod-name{font-size:.74rem;margin-bottom:.25rem;color:var(--text2);}
+  .lc-panel-prod-price{font-size:.7rem;color:var(--accent);}
+  .lc-end-btn{
+    width:calc(100% - 2.6rem);margin:auto 1.3rem 1.3rem;
+    padding:.7rem;background:rgba(160,80,80,.15);color:#c07a7a;
+    border:1px solid rgba(160,80,80,.3);font-size:.68rem;letter-spacing:.1em;
+    cursor:pointer;font-family:'Noto Sans JP',sans-serif;text-transform:uppercase;
+    transition:background .2s;
+  }
+  .lc-end-btn:hover{background:rgba(160,80,80,.3);}
+
   /* ── STAFF & VIDEO PAGES ── */
   .story-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
   .story-tab {
@@ -898,12 +999,13 @@ export default function SelectShop() {
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
 
   const drawerItems = [
-    { label: "COLLECTION", page: "products" },
-    { label: "NEW",        page: "new" },
-    { label: "GIFT",       page: "best" },
+    { label: "COLLECTION",   page: "products" },
+    { label: "NEW",          page: "new" },
+    { label: "GIFT",         page: "best" },
     { label: "STAFF REVIEW", page: "story" },
-    { label: "VIDEO",      page: "video" },
-    { label: "ABOUT",      page: "about" },
+    { label: "VIDEO",        page: "video" },
+    { label: "LIVE 接客",    page: "live" },
+    { label: "ABOUT",        page: "about" },
   ];
 
   return (
@@ -952,7 +1054,7 @@ export default function SelectShop() {
           <div className="hdr-in">
             <span className="logo" onClick={() => nav("home")}>{settings.shopName}</span>
             <nav className="nav">
-              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"]].map(([p,l]) => (
+              {[["products","COLLECTION"],["new","NEW"],["best","GIFT"],["story","REVIEW"],["video","VIDEO"],["live","LIVE"]].map(([p,l]) => (
                 <button key={l} className={`nl ${page===p?"on":""}`} onClick={() => nav(p)}>{l}</button>
               ))}
             </nav>
@@ -991,7 +1093,8 @@ export default function SelectShop() {
       {page === "about"           && <AboutPage      settings={settings} />}
       {page === "story"           && <StaffStoryPage nav={nav} products={products} />}
       {page === "article-detail"  && <ArticleDetailPage article={selectedArticle} nav={nav} products={products} addToCart={addToCart} />}
-      {page === "video"           && <VideoPage      nav={nav} products={products} />}
+      {page === "video"           && <VideoPage        nav={nav} products={products} />}
+      {page === "live"            && <LiveConsultPage nav={nav} products={products} addToCart={addToCart} />}
       {page === "admin"           && <AdminPage      categories={categories} setCategories={setCategories} products={products} setProducts={setProducts} settings={settings} setSettings={setSettings} nav={nav} adminPage={adminPage} setAdminPage={setAdminPage} />}
     </div>
   );
@@ -2341,6 +2444,196 @@ function VideoGrid({ nav, products }) {
         </div>
       )}
     </>
+  );
+}
+
+// ── LIVE CONSULT PAGE ──
+function LiveConsultPage({ nav, products, addToCart }) {
+  const [showForm, setShowForm] = React.useState(false);
+  const [roomId, setRoomId] = React.useState(null);
+  const [form, setForm] = React.useState({ name:"", email:"", staff_id:"", note:"" });
+  const [booked, setBooked] = React.useState(false);
+  const featuredProducts = products ? products.filter(p => p.is_featured || p.is_best_seller).slice(0, 4) : [];
+
+  function startNow() {
+    const id = "ckd-" + Math.random().toString(36).slice(2,10);
+    setRoomId(id);
+  }
+
+  function endSession() {
+    setRoomId(null);
+  }
+
+  function submitForm(e) {
+    e.preventDefault();
+    setBooked(true);
+    setTimeout(() => { setShowForm(false); setBooked(false); setForm({ name:"", email:"", staff_id:"", note:"" }); }, 2500);
+  }
+
+  if (roomId) {
+    return (
+      <div className="lc-room">
+        <iframe
+          className="lc-room-iframe"
+          src={`https://meet.jit.si/${roomId}#config.prejoinPageEnabled=false`}
+          allow="camera; microphone; fullscreen; display-capture"
+          title="Live Consultation"
+        />
+        <div style={{position:"absolute",top:0,right:0,width:280,height:"100%",background:"rgba(15,13,11,.92)",borderLeft:"1px solid rgba(200,168,130,.12)",display:"flex",flexDirection:"column",overflow:"hidden"}}>
+          <div style={{padding:"1.2rem 1rem .8rem",borderBottom:"1px solid rgba(200,168,130,.1)"}}>
+            <div className="lc-badge" style={{marginBottom:".6rem"}}>
+              <span className="lc-badge-dot" />
+              <span style={{fontSize:".6rem",letterSpacing:".15em"}}>LIVE 接客中</span>
+            </div>
+            <div style={{fontSize:".7rem",color:"var(--text3)"}}>スタッフが厳選した商品をご紹介しています</div>
+          </div>
+          <div style={{flex:1,overflowY:"auto",padding:"1rem"}}>
+            {featuredProducts.map(p => (
+              <div key={p.id} style={{marginBottom:"1rem",cursor:"pointer"}} onClick={() => { endSession(); nav("product-detail", { product: p }); }}>
+                <div style={{width:"100%",aspectRatio:"4/3",borderRadius:4,overflow:"hidden",marginBottom:".4rem"}}>
+                  <Placeholder image={p.images?.[0]} color={p.color||"#2a1f1a"} alt={p.name} style={{}} />
+                </div>
+                <div style={{fontSize:".72rem",color:"var(--text2)",lineHeight:1.3}}>{p.name}</div>
+                <div style={{fontSize:".7rem",color:"var(--accent)",marginTop:".2rem"}}>
+                  ¥{(p.sale_price||p.price).toLocaleString()}
+                </div>
+                <button onClick={e=>{e.stopPropagation();addToCart(p);}} style={{marginTop:".4rem",width:"100%",padding:".35rem",background:"rgba(200,168,130,.1)",border:"1px solid rgba(200,168,130,.25)",color:"var(--accent)",fontSize:".65rem",borderRadius:3,cursor:"pointer",letterSpacing:".08em"}}>
+                  カートに追加
+                </button>
+              </div>
+            ))}
+          </div>
+          <div style={{padding:"1rem",borderTop:"1px solid rgba(200,168,130,.1)"}}>
+            <button className="lc-end-btn" onClick={endSession} style={{width:"100%",padding:".7rem",borderRadius:4,border:"1px solid rgba(160,80,80,.3)",background:"rgba(160,80,80,.1)",color:"#c07a7a",fontSize:".72rem",letterSpacing:".1em",cursor:"pointer"}}>
+              通話を終了する
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pe">
+      {/* Hero */}
+      <div className="lc-hero">
+        <div style={{maxWidth:640}}>
+          <div className="lc-badge" style={{marginBottom:"1.5rem"}}>
+            <span className="lc-badge-dot" />
+            <span style={{fontSize:".65rem",letterSpacing:".2em"}}>LIVE 接客</span>
+          </div>
+          <h1 className="fd" style={{fontSize:"clamp(2rem,5vw,3.5rem)",fontWeight:300,lineHeight:1.2,marginBottom:"1.2rem"}}>
+            スタッフと話しながら、<br />理想の一品を見つける。
+          </h1>
+          <p style={{fontSize:".85rem",color:"var(--text3)",lineHeight:1.9,maxWidth:"42ch",marginBottom:"2.5rem"}}>
+            ビデオ通話でスタッフが直接ご案内。テキストでは伝わらない素材感や使い心地を、リアルタイムでご紹介します。
+          </p>
+          <div style={{display:"flex",gap:"1rem",flexWrap:"wrap"}}>
+            <button onClick={startNow} style={{padding:".9rem 2.5rem",background:"var(--accent)",color:"#0f0d0b",fontSize:".8rem",letterSpacing:".15em",border:"none",borderRadius:2,cursor:"pointer",fontWeight:600}}>
+              今すぐ接客を開始する
+            </button>
+            <button onClick={() => setShowForm(true)} style={{padding:".9rem 2.5rem",background:"transparent",color:"var(--accent)",fontSize:".8rem",letterSpacing:".15em",border:"1px solid rgba(200,168,130,.4)",borderRadius:2,cursor:"pointer"}}>
+              予約する
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* How it works */}
+      <div className="sec">
+        <div className="sec-hdr"><div className="sl">HOW IT WORKS</div><h2 className="fd" style={{fontSize:"1.6rem",fontWeight:300}}>ご利用の流れ</h2></div>
+        <div className="lc-steps">
+          {[
+            { num:"01", title:"スタッフを選ぶ", desc:"担当スタッフのプロフィールを確認し、お好みのスタッフをお選びください。" },
+            { num:"02", title:"接続する", desc:"「今すぐ開始」ボタンを押すだけで、すぐにビデオ通話が始まります。" },
+            { num:"03", title:"商品を選ぶ", desc:"スタッフが商品をご紹介。気に入ったらそのままカートに追加できます。" },
+          ].map(s => (
+            <div key={s.num} style={{padding:"2rem",background:"var(--srf)",border:"1px solid var(--bdr)",borderRadius:4}}>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"2.5rem",color:"var(--accent)",opacity:.4,marginBottom:".8rem"}}>{s.num}</div>
+              <div className="fd" style={{fontSize:"1.05rem",fontWeight:400,marginBottom:".6rem"}}>{s.title}</div>
+              <div style={{fontSize:".78rem",color:"var(--text3)",lineHeight:1.8}}>{s.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Staff */}
+      <div className="sec">
+        <div className="sec-hdr"><div className="sl">OUR STAFF</div><h2 className="fd" style={{fontSize:"1.6rem",fontWeight:300}}>担当スタッフ</h2></div>
+        <div className="lc-staff-grid">
+          {STAFF_MEMBERS.map(s => (
+            <div key={s.id} style={{background:"var(--srf)",border:"1px solid var(--bdr)",borderRadius:4,overflow:"hidden"}}>
+              <div style={{aspectRatio:"3/2",overflow:"hidden"}}>
+                <img src={s.image} alt={s.name_jp} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+              </div>
+              <div style={{padding:"1.2rem"}}>
+                <div style={{display:"flex",alignItems:"center",gap:".5rem",marginBottom:".4rem"}}>
+                  <span style={{width:7,height:7,borderRadius:"50%",background:"#6abf69",display:"inline-block"}} />
+                  <span style={{fontSize:".6rem",color:"#6abf69",letterSpacing:".1em"}}>ONLINE</span>
+                </div>
+                <div className="fd" style={{fontSize:"1.1rem",fontWeight:400}}>{s.name_jp}</div>
+                <div style={{fontSize:".7rem",color:"var(--accent)",letterSpacing:".1em",margin:".2rem 0 .6rem"}}>{s.role}</div>
+                <button onClick={startNow} style={{width:"100%",padding:".55rem",background:"transparent",border:"1px solid rgba(200,168,130,.35)",color:"var(--accent)",fontSize:".7rem",letterSpacing:".1em",borderRadius:2,cursor:"pointer"}}>
+                  このスタッフと話す
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Booking form overlay */}
+      {showForm && (
+        <div className="lc-form-overlay" onClick={e => { if(e.target===e.currentTarget) setShowForm(false); }}>
+          <div style={{background:"var(--srf)",border:"1px solid var(--bdr)",borderRadius:4,padding:"2.5rem",width:"100%",maxWidth:480,maxHeight:"90vh",overflowY:"auto"}}>
+            {booked ? (
+              <div style={{textAlign:"center",padding:"2rem 0"}}>
+                <div style={{fontSize:"2rem",marginBottom:"1rem"}}>✓</div>
+                <div className="fd" style={{fontSize:"1.3rem",marginBottom:".6rem"}}>ご予約を受け付けました</div>
+                <div style={{fontSize:".78rem",color:"var(--text3)"}}>ご登録のメールアドレスに確認メールをお送りします。</div>
+              </div>
+            ) : (
+              <>
+                <div className="fd" style={{fontSize:"1.4rem",fontWeight:300,marginBottom:"1.5rem"}}>接客のご予約</div>
+                <form onSubmit={submitForm} style={{display:"flex",flexDirection:"column",gap:"1.1rem"}}>
+                  <div>
+                    <label style={{fontSize:".7rem",color:"var(--text3)",letterSpacing:".1em",display:"block",marginBottom:".4rem"}}>お名前 *</label>
+                    <input required value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}
+                      style={{width:"100%",padding:".7rem .8rem",background:"var(--bg)",border:"1px solid var(--bdr)",color:"var(--text1)",fontSize:".82rem",borderRadius:2,boxSizing:"border-box"}} />
+                  </div>
+                  <div>
+                    <label style={{fontSize:".7rem",color:"var(--text3)",letterSpacing:".1em",display:"block",marginBottom:".4rem"}}>メールアドレス *</label>
+                    <input required type="email" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))}
+                      style={{width:"100%",padding:".7rem .8rem",background:"var(--bg)",border:"1px solid var(--bdr)",color:"var(--text1)",fontSize:".82rem",borderRadius:2,boxSizing:"border-box"}} />
+                  </div>
+                  <div>
+                    <label style={{fontSize:".7rem",color:"var(--text3)",letterSpacing:".1em",display:"block",marginBottom:".4rem"}}>ご希望のスタッフ</label>
+                    <select value={form.staff_id} onChange={e=>setForm(f=>({...f,staff_id:e.target.value}))}
+                      style={{width:"100%",padding:".7rem .8rem",background:"var(--bg)",border:"1px solid var(--bdr)",color:"var(--text1)",fontSize:".82rem",borderRadius:2,boxSizing:"border-box"}}>
+                      <option value="">指定なし</option>
+                      {STAFF_MEMBERS.map(s => <option key={s.id} value={s.id}>{s.name_jp} ({s.role})</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{fontSize:".7rem",color:"var(--text3)",letterSpacing:".1em",display:"block",marginBottom:".4rem"}}>ご要望・備考</label>
+                    <textarea value={form.note} onChange={e=>setForm(f=>({...f,note:e.target.value}))} rows={3}
+                      style={{width:"100%",padding:".7rem .8rem",background:"var(--bg)",border:"1px solid var(--bdr)",color:"var(--text1)",fontSize:".82rem",borderRadius:2,resize:"vertical",boxSizing:"border-box"}} />
+                  </div>
+                  <div style={{display:"flex",gap:".8rem",marginTop:".5rem"}}>
+                    <button type="button" onClick={() => setShowForm(false)} style={{flex:1,padding:".75rem",background:"transparent",border:"1px solid var(--bdr)",color:"var(--text3)",fontSize:".78rem",borderRadius:2,cursor:"pointer"}}>
+                      キャンセル
+                    </button>
+                    <button type="submit" style={{flex:2,padding:".75rem",background:"var(--accent)",color:"#0f0d0b",fontSize:".78rem",letterSpacing:".1em",border:"none",borderRadius:2,cursor:"pointer",fontWeight:600}}>
+                      予約を確定する
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
