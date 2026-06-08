@@ -2,40 +2,40 @@ import { useState, useEffect, useRef } from "react";
 
 // ===== DATA =====
 const MOOD_CATEGORIES = [
-  { id: "relax",      label: "RELAX",      jp: "リラックス",  color: "#2a1f1a" },
-  { id: "confidence", label: "CONFIDENCE", jp: "コンフィデンス", color: "#1a1f2a" },
-  { id: "sexy",       label: "SEXY",       jp: "セクシー",   color: "#2a1a1f" },
-  { id: "minimal",    label: "MINIMAL",    jp: "ミニマル",   color: "#1f1f1f" },
-  { id: "romantic",   label: "ROMANTIC",   jp: "ロマンティック", color: "#2a1a22" },
-  { id: "private",    label: "PRIVATE",    jp: "プライベート", color: "#1a2020" },
+  { id: "daily",   label: "DAILY",   jp: "日常使い",   color: "#2a1f1a" },
+  { id: "kitchen", label: "KITCHEN", jp: "キッチン",   color: "#1a1f2a" },
+  { id: "desk",    label: "DESK",    jp: "デスク周り", color: "#2a1a1f" },
+  { id: "minimal", label: "MINIMAL", jp: "ミニマル",   color: "#1f1f1f" },
+  { id: "gift",    label: "GIFT",    jp: "ギフト",     color: "#2a1a22" },
+  { id: "season",  label: "SEASON",  jp: "季節の品",   color: "#1a2020" },
 ];
 
 const INITIAL_CATEGORIES = [
-  { id: "bra",       name: "ブラジャー",     slug: "bra",       description: "上質なブラジャーコレクション", display_order: 1, is_active: true },
-  { id: "shorts",    name: "ショーツ",       slug: "shorts",    description: "洗練されたショーツ",           display_order: 2, is_active: true },
-  { id: "set",       name: "セットアップ",   slug: "set",       description: "ブラ＆ショーツセット",         display_order: 3, is_active: true },
-  { id: "nightwear", name: "ナイトウェア",   slug: "nightwear", description: "上品なナイトウェア",           display_order: 4, is_active: true },
-  { id: "bridal",    name: "ブライダル",     slug: "bridal",    description: "特別な日のランジェリー",       display_order: 5, is_active: true },
-  { id: "loungewear",name: "ラウンジウェア", slug: "loungewear",description: "日常に馴染む上質な部屋着",     display_order: 6, is_active: true },
+  { id: "vessel",   name: "器・食器",     slug: "vessel",   description: "日常を彩る器と食器",         display_order: 1, is_active: true },
+  { id: "kitchen",  name: "キッチン雑貨", slug: "kitchen",  description: "暮らしに寄り添うキッチン用品", display_order: 2, is_active: true },
+  { id: "stationery",name:"文具・紙雑貨", slug: "stationery",description:"丁寧な文具と紙もの",          display_order: 3, is_active: true },
+  { id: "interior", name: "インテリア",   slug: "interior", description: "空間を整えるインテリア小物",   display_order: 4, is_active: true },
+  { id: "care",     name: "ケア用品",     slug: "care",     description: "心と身体を整えるケアアイテム", display_order: 5, is_active: true },
+  { id: "gift",     name: "ギフト",       slug: "gift",     description: "贈り物に選ばれる特別な一品",   display_order: 6, is_active: true },
 ];
 
-const BUDGET_RANGES = ["〜5,000円", "5,000円〜10,000円", "10,000円〜20,000円", "20,000円〜"];
+const BUDGET_RANGES = ["〜3,000円", "3,000円〜8,000円", "8,000円〜15,000円", "15,000円〜"];
 
 function getBudgetRange(price) {
-  if (price < 5000) return "〜5,000円";
-  if (price < 10000) return "5,000円〜10,000円";
-  if (price < 20000) return "10,000円〜20,000円";
-  return "20,000円〜";
+  if (price < 3000)  return "〜3,000円";
+  if (price < 8000)  return "3,000円〜8,000円";
+  if (price < 15000) return "8,000円〜15,000円";
+  return "15,000円〜";
 }
 
 const PRODUCT_NAMES = [
-  "Silk Soft Bra", "Lace Dress", "Sheer Cami", "Bell Strap Bodysuit",
-  "Silk Robe", "Lace Thong", "Velvet Set", "Mesh Bodysuit",
-  "Satin Slip", "Bridal Set", "Cotton Brief",
+  "Ceramic Mug", "Wooden Tray", "Linen Pouch", "Brass Clip",
+  "Stone Coaster", "Glass Vase", "Iron Tray", "Cotton Towel",
+  "Paper Weight", "Copper Spoon", "Washi Tape",
 ];
 const PRODUCT_COLORS = [
-  "#2a1f1a","#1f1a26","#261a1f","#1a2222","#221f1a","#1a1f26",
-  "#261a26","#1f2618","#261a1a","#1a1f1f","#2a2218",
+  "#2a2218","#1e1a14","#261e16","#1a1e22","#221e1a","#181e1a",
+  "#261e1e","#1e2218","#221a1e","#1a1a1a","#2a1e18",
 ];
 
 function generateProducts() {
@@ -43,7 +43,7 @@ function generateProducts() {
   for (let i = 0; i < 44; i++) {
     const nameBase = PRODUCT_NAMES[i % PRODUCT_NAMES.length];
     const num = String(Math.floor(i / PRODUCT_NAMES.length) + 1).padStart(2, "0");
-    const price = [4800,6800,5500,12000,9800,3800,15000,8800,7200,22000,4200,11000,6500,18000,9200][i % 15];
+    const price = [1800,2400,3200,4500,6800,5500,9800,3800,7200,12000,2200,8800,4200,15000,6200][i % 15];
     const catId = INITIAL_CATEGORIES[i % 6].id;
     products.push({
       id: `prod-${i + 1}`,
@@ -51,19 +51,19 @@ function generateProducts() {
       slug: `${nameBase.toLowerCase().replace(/ /g, "-")}-${num}`,
       price,
       sale_price: i % 8 === 0 ? Math.floor(price * 0.8) : null,
-      description: `上質なシルクとレースを使用した、肌に馴染むランジェリー。細部まで丁寧に仕上げた、毎日身につけたくなる一着です。`,
-      short_description: `上質素材と繊細なデザイン。肌に寄り添うフィット感。`,
+      description: `丁寧に選んだ素材と、誠実なつくり手の手仕事が宿る一品。日常の中にそっと置いておくだけで、暮らしに静かな豊かさをもたらします。`,
+      short_description: `素材の良さと丁寧な仕上げ。毎日使いたくなる一点。`,
       category_ids: [catId],
-      tags: ["Lingerie", "Luxury", "Japan"],
+      tags: ["Zakka", "Minimal", "Japan"],
       stock_quantity: i % 11 === 0 ? 0 : Math.floor(Math.random() * 15) + 1,
       is_published: true,
       is_new: i < 8,
       is_best_seller: i >= 8 && i < 16,
       is_featured: i < 4,
       budget_range: getBudgetRange(price),
-      material: ["シルク100%", "レース", "コットン", "サテン", "ベルベット", "メッシュ"][i % 6],
-      size: ["XS/S", "S/M", "M/L", "L/XL", "フリーサイズ"][i % 5],
-      color_name: ["ブラック", "ネイビー", "バーガンディ", "アイボリー", "モカ"][i % 5],
+      material: ["陶器", "木材", "リネン", "真鍮", "ガラス", "コットン"][i % 6],
+      size: ["W8×H9cm", "W24×D16cm", "φ9cm", "W12×H8cm", "フリー"][i % 5],
+      color_name: ["ナチュラル", "スモークブラック", "アッシュグレー", "ウォールナット", "クリア"][i % 5],
       color: PRODUCT_COLORS[i % PRODUCT_COLORS.length],
     });
   }
@@ -75,16 +75,16 @@ const INITIAL_PRODUCTS = generateProducts();
 const INITIAL_SETTINGS = {
   shopName: "CKD SHOP",
   mainCopy: "LESS IS MORE,\nBUT BETTER.",
-  subCopy: "本質的な美しさと、肌に馴染む上質さ。\nいちばん近くにある、いちばん大切なもの。",
-  shippingFee: 660,
-  freeShippingLine: 15000,
+  subCopy: "素材と誠実さで選んだ、長く使えるものだけを。\n日常に、静かな豊かさを。",
+  shippingFee: 550,
+  freeShippingLine: 10000,
   contactEmail: "hello@ckdshop.jp",
 };
 
 const JOURNAL_POSTS = [
-  { id: 1, category: "STYLE GUIDE", title: "ランジェリーの選び方", date: "2025.05.20", color: "#2a1f1a" },
-  { id: 2, category: "JOURNAL",     title: "上質な素材について",   date: "2025.05.12", color: "#1a1f2a" },
-  { id: 3, category: "STORY",       title: "CKDが考えるインナー美", date: "2025.04.28", color: "#261a1f" },
+  { id: 1, category: "STORY",       title: "つくり手の背景にあるもの",   date: "2025.05.20", color: "#2a1f1a" },
+  { id: 2, category: "JOURNAL",     title: "素材から選ぶ、器の楽しみ方", date: "2025.05.12", color: "#1a1f2a" },
+  { id: 3, category: "STYLE GUIDE", title: "長く使えるものを選ぶ基準",   date: "2025.04.28", color: "#261a1f" },
 ];
 
 // ===== CSS =====
@@ -874,11 +874,11 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
         <div style={{maxWidth:"600px",margin:"0 auto"}}>
           <div className="sl" style={{textAlign:"center",marginBottom:"1.5rem"}}>STYLE QUIZ</div>
           <h2 className="fd" style={{fontSize:"clamp(2rem,4vw,3rem)",fontWeight:300,lineHeight:1.2,marginBottom:"1.2rem"}}>
-            スタイル診断
+            暮らしの診断
           </h2>
           <p style={{fontSize:".8rem",lineHeight:2,color:"var(--text2)",marginBottom:"2.5rem"}}>
-            あなたにぴったりのランジェリーをご提案します。<br/>
-            いくつかの質問に答えるだけで、あなただけのスタイルが見つかります。
+            あなたの暮らしのスタイルに合った雑貨をご提案します。<br/>
+            いくつかの質問に答えるだけで、ぴったりのアイテムが見つかります。
           </p>
           <button className="btn btn-a" onClick={() => nav("products")}>診断を始める →</button>
         </div>
@@ -1225,9 +1225,9 @@ function AboutPage({ settings }) {
       </div>
       <div style={{maxWidth:"680px",margin:"0 auto",padding:"5rem 2rem"}}>
         {[
-          "CKD SHOPは、「身につけるものの質が、自分の質を高める」という信念から生まれたランジェリーブランドです。",
-          "私たちが選ぶのは、肌に触れるものだから妥協しない上質な素材と、見えない部分まで丁寧に仕上げたデザインだけです。",
-          "流行ではなく、本質へ。毎日身につけるものだからこそ、長く愛せる一着を届けることが私たちの使命です。",
+          "CKD SHOPは、「日常にある道具の質が、暮らしの質を高める」という信念から生まれたセレクト雑貨店です。",
+          "私たちが選ぶのは「素材の良さ」「つくり手の誠実さ」「使うたびに増す愛着」を基準にした、長く使えるものだけです。",
+          "流行ではなく、本質へ。毎日手に取るものだからこそ、静かに豊かにしてくれる一点を届けることが私たちの仕事です。",
         ].map((t,i) => (
           <p key={i} style={{fontSize:".84rem",lineHeight:2.2,color:"var(--text2)",marginBottom:"2rem"}}>{t}</p>
         ))}
@@ -1324,9 +1324,9 @@ const COLOR_SWATCHES = [
   { hex: "#3a2e28", label: "トープ" },
   { hex: "#1e1e1e", label: "ジェット" },
 ];
-const MATERIAL_OPTIONS = ["シルク100%","レース","コットン","サテン","ベルベット","メッシュ","チュール","ナイロン","ポリエステル","リネン"];
-const SIZE_OPTIONS     = ["XS/S","S/M","M/L","L/XL","フリーサイズ","XS","S","M","L","XL"];
-const COLOR_OPTIONS    = ["ブラック","ネイビー","バーガンディ","アイボリー","モカ","ホワイト","グレー","ピンク","ベージュ","グリーン"];
+const MATERIAL_OPTIONS = ["陶器","磁器","木材","リネン","コットン","真鍮","ガラス","鉄","紙","竹","ステンレス","シリコン"];
+const SIZE_OPTIONS     = ["S","M","L","フリー","φ8cm","φ10cm","φ12cm","W15×D10cm","W24×D16cm","W30×D20cm"];
+const COLOR_OPTIONS    = ["ナチュラル","スモークブラック","アッシュグレー","ウォールナット","クリア","ホワイト","ネイビー","テラコッタ","マットブラック","オリーブ"];
 
 function makeBlank() {
   return {
