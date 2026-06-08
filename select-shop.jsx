@@ -107,7 +107,7 @@ const INITIAL_PRODUCTS = generateProducts();
 
 const INITIAL_SETTINGS = {
   shopName: "CKD SHOP",
-  mainCopy: "LESS IS MORE,\nBUT BETTER.",
+  mainCopy: "Let me take your mind to heaven.",
   subCopy: "素材と誠実さで選んだ、長く使えるものだけを。\n日常に、静かな豊かさを。",
   shippingFee: 550,
   freeShippingLine: 10000,
@@ -1172,7 +1172,6 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
         </div>
 
         <div className="hero-content">
-          <div className="hero-eyebrow">NEW COLLECTION 2025</div>
           <h1 className="hero-h fd" style={{whiteSpace:"pre-line"}}>{settings.mainCopy}</h1>
           <p className="hero-sub" style={{whiteSpace:"pre-line"}}>{settings.subCopy}</p>
           <div style={{display:"flex",gap:"1rem",flexWrap:"wrap"}}>
