@@ -108,7 +108,7 @@ const INITIAL_PRODUCTS = generateProducts();
 const INITIAL_SETTINGS = {
   shopName: "CKD SHOP",
   mainCopy: "Let me take your mind to heaven.",
-  subCopy: "素材と誠実さで選んだ、長く使えるものだけを。\n日常に、静かな豊かさを。",
+  subCopy: "あなたの求める脳イキの境地への誘いをサポート致します。",
   shippingFee: 550,
   freeShippingLine: 10000,
   contactEmail: "hello@ckdshop.jp",
@@ -1175,7 +1175,7 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
           <h1 className="hero-h fd" style={{whiteSpace:"pre-line"}}>{settings.mainCopy}</h1>
           <p className="hero-sub" style={{whiteSpace:"pre-line"}}>{settings.subCopy}</p>
           <div style={{display:"flex",gap:"1rem",flexWrap:"wrap"}}>
-            <button className="btn btn-p" onClick={() => nav("products")}>STAR COLLECTION</button>
+            <button className="btn btn-p" onClick={() => nav("products")}>COLLECTION</button>
             <button className="btn btn-o" onClick={() => nav("new")}>NEW ARRIVALS →</button>
           </div>
         </div>
