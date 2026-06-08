@@ -306,7 +306,7 @@ const css = `
   .hero {
     position: relative; width: 100%;
     min-height: 100vh; overflow: hidden;
-    display: flex; align-items: flex-end;
+    display: flex; align-items: center;
     padding-top: 60px;
   }
   .hero-bg {
@@ -326,7 +326,7 @@ const css = `
   .hero-content {
     position: relative; z-index: 2;
     max-width: 1440px; margin: 0 auto; width: 100%;
-    padding: 0 3rem 8rem;
+    padding: 0 3rem 4rem;
   }
   .hero-eyebrow {
     font-size: 0.62rem; letter-spacing: 0.3em; color: var(--accent);
