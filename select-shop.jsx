@@ -1297,8 +1297,8 @@ function HomePage({ products, categories, settings, nav, addToCart }) {
         <div style={{maxWidth:"1440px",margin:"0 auto",padding:"4rem 2rem 2rem"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:"2rem"}}>
             <div>
-              <div className="sl">JOURNAL</div>
-              <h2 className="sh fd" style={{fontSize:"1.6rem"}}>ジャーナル</h2>
+              <div className="sl">SALL</div>
+              <h2 className="sh fd" style={{fontSize:"1.6rem"}}>SALL</h2>
             </div>
             <span className="view-all" onClick={() => {}}>VIEW ALL</span>
           </div>
